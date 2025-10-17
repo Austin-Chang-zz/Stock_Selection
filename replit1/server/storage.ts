@@ -1,4 +1,3 @@
-
 import {
   type Stock,
   type InsertStock,
@@ -14,13 +13,19 @@ import { randomUUID } from "crypto";
 import { db } from "./db";
 import { eq, and, desc, sql } from "drizzle-orm";
 
+/**
+ * Storage interface defining all database operations
+ * Abstracts the underlying database implementation
+ */
 export interface IStorage {
+  // Stock operations
   getStock(code: string): Promise<Stock | undefined>;
   getAllStocks(): Promise<Stock[]>;
   createStock(stock: InsertStock): Promise<Stock>;
   updateStock(code: string, stock: Partial<InsertStock>): Promise<Stock | undefined>;
   deleteStock(code: string): Promise<void>;
 
+  // Stock price operations
   getStockPrices(stockCode: string, limit?: number): Promise<StockPrice[]>;
   getStockPricesByDate(date: string): Promise<StockPrice[]>;
   getStockPrice(stockCode: string, date: string): Promise<StockPrice | undefined>;
@@ -29,6 +34,7 @@ export interface IStorage {
   deleteStockPrice(stockCode: string, date: string): Promise<void>;
   getAllStockPrices(): Promise<StockPrice[]>;
 
+  // Crossover signal operations
   getCrossoverSignals(date?: string, signalType?: string): Promise<CrossoverSignal[]>;
   getCrossoverSignal(stockCode: string, crossDate: string, signalType: string): Promise<CrossoverSignal | undefined>;
   createCrossoverSignal(signal: InsertCrossoverSignal): Promise<CrossoverSignal>;
@@ -37,21 +43,37 @@ export interface IStorage {
   getLastCrossoverPerStock(): Promise<Map<string, CrossoverSignal>>;
 }
 
+/**
+ * PostgreSQL implementation of the storage interface
+ * Uses Drizzle ORM for type-safe database operations
+ */
 export class PostgresStorage implements IStorage {
+  /**
+   * Retrieves a stock by its code
+   */
   async getStock(code: string): Promise<Stock | undefined> {
     const result = await db.select().from(stocks).where(eq(stocks.code, code)).limit(1);
     return result[0];
   }
 
+  /**
+   * Retrieves all stocks from the database
+   */
   async getAllStocks(): Promise<Stock[]> {
     return await db.select().from(stocks);
   }
 
+  /**
+   * Creates a new stock record
+   */
   async createStock(insertStock: InsertStock): Promise<Stock> {
     const result = await db.insert(stocks).values(insertStock).returning();
     return result[0];
   }
 
+  /**
+   * Updates an existing stock record
+   */
   async updateStock(code: string, updates: Partial<InsertStock>): Promise<Stock | undefined> {
     const result = await db.update(stocks)
       .set(updates)
@@ -60,26 +82,39 @@ export class PostgresStorage implements IStorage {
     return result[0];
   }
 
+  /**
+   * Deletes a stock record by code
+   */
   async deleteStock(code: string): Promise<void> {
     await db.delete(stocks).where(eq(stocks.code, code));
   }
 
+  /**
+   * Retrieves stock prices for a specific stock, optionally limited by count
+   * Returns prices sorted by date descending (most recent first)
+   */
   async getStockPrices(stockCode: string, limit?: number): Promise<StockPrice[]> {
     let query = db.select().from(stockPrices)
       .where(eq(stockPrices.stockCode, stockCode))
       .orderBy(desc(stockPrices.date));
-    
+
     if (limit) {
       query = query.limit(limit) as any;
     }
-    
+
     return await query;
   }
 
+  /**
+   * Retrieves all stock prices for a specific date
+   */
   async getStockPricesByDate(date: string): Promise<StockPrice[]> {
     return await db.select().from(stockPrices).where(eq(stockPrices.date, date));
   }
 
+  /**
+   * Retrieves a specific stock price for a stock on a specific date
+   */
   async getStockPrice(stockCode: string, date: string): Promise<StockPrice | undefined> {
     const result = await db.select().from(stockPrices)
       .where(and(
@@ -90,15 +125,22 @@ export class PostgresStorage implements IStorage {
     return result[0];
   }
 
+  /**
+   * Creates a new stock price record
+   */
   async createStockPrice(insertPrice: InsertStockPrice): Promise<StockPrice> {
     const result = await db.insert(stockPrices).values(insertPrice).returning();
     return result[0];
   }
 
+  /**
+   * Updates an existing stock price or creates a new one if it doesn't exist
+   */
   async upsertStockPrice(insertPrice: InsertStockPrice): Promise<StockPrice> {
     const existing = await this.getStockPrice(insertPrice.stockCode, insertPrice.date);
-    
+
     if (existing) {
+      // Update existing record
       const result = await db.update(stockPrices)
         .set(insertPrice)
         .where(and(
@@ -108,10 +150,14 @@ export class PostgresStorage implements IStorage {
         .returning();
       return result[0];
     }
-    
+
+    // Create new record
     return this.createStockPrice(insertPrice);
   }
 
+  /**
+   * Deletes a specific stock price record
+   */
   async deleteStockPrice(stockCode: string, date: string): Promise<void> {
     await db.delete(stockPrices)
       .where(and(
@@ -120,28 +166,37 @@ export class PostgresStorage implements IStorage {
       ));
   }
 
+  /**
+   * Retrieves all stock prices from the database
+   */
   async getAllStockPrices(): Promise<StockPrice[]> {
     return await db.select().from(stockPrices);
   }
 
+  /**
+   * Retrieves crossover signals with optional date and signal type filtering
+   */
   async getCrossoverSignals(date?: string, signalType?: string): Promise<CrossoverSignal[]> {
     let conditions = [];
-    
+
     if (date) {
       conditions.push(eq(crossoverSignals.crossDate, date));
     }
-    
+
     if (signalType) {
       conditions.push(eq(crossoverSignals.signalType, signalType));
     }
-    
+
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
-    
+
     return await db.select().from(crossoverSignals)
       .where(whereClause)
       .orderBy(desc(crossoverSignals.crossDate), crossoverSignals.volumeRank);
   }
 
+  /**
+   * Retrieves a specific crossover signal
+   */
   async getCrossoverSignal(stockCode: string, crossDate: string, signalType: string): Promise<CrossoverSignal | undefined> {
     const result = await db.select().from(crossoverSignals)
       .where(and(
@@ -153,18 +208,24 @@ export class PostgresStorage implements IStorage {
     return result[0];
   }
 
+  /**
+   * Creates a new crossover signal record
+   */
   async createCrossoverSignal(insertSignal: InsertCrossoverSignal): Promise<CrossoverSignal> {
     const result = await db.insert(crossoverSignals).values(insertSignal).returning();
     return result[0];
   }
 
+  /**
+   * Updates an existing crossover signal or creates a new one
+   */
   async upsertCrossoverSignal(insertSignal: InsertCrossoverSignal): Promise<CrossoverSignal> {
     const existing = await this.getCrossoverSignal(
       insertSignal.stockCode,
       insertSignal.crossDate,
       insertSignal.signalType
     );
-    
+
     if (existing) {
       const result = await db.update(crossoverSignals)
         .set(insertSignal)
@@ -176,31 +237,43 @@ export class PostgresStorage implements IStorage {
         .returning();
       return result[0];
     }
-    
+
     return this.createCrossoverSignal(insertSignal);
   }
 
+  /**
+   * Deletes all crossover signals for a specific date
+   */
   async deleteCrossoverSignalsByDate(date: string): Promise<void> {
     await db.delete(crossoverSignals).where(eq(crossoverSignals.crossDate, date));
   }
 
+  /**
+   * Retrieves the most recent crossover signal for each stock
+   * Used for investment candidate tracking feature
+   */
   async getLastCrossoverPerStock(): Promise<Map<string, CrossoverSignal>> {
     const lastCrossovers = new Map<string, CrossoverSignal>();
-    
-    // Get all signals ordered by date descending
+
+    // Get all signals ordered by date descending (most recent first)
     const signals = await db.select().from(crossoverSignals)
       .orderBy(desc(crossoverSignals.crossDate));
-    
+
+    // Since signals are sorted by date descending, first occurrence for each stock is the most recent
     for (const signal of signals) {
       if (!lastCrossovers.has(signal.stockCode)) {
         lastCrossovers.set(signal.stockCode, signal);
       }
     }
-    
+
     return lastCrossovers;
   }
 }
 
+/**
+ * In-memory implementation of the storage interface
+ * Used for development and testing without a database
+ */
 export class MemStorage implements IStorage {
   private stocks: Map<string, Stock>;
   private stockPrices: Map<string, StockPrice>;
@@ -381,5 +454,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Use PostgreSQL storage
+// Use PostgreSQL storage for production
 export const storage = new PostgresStorage();

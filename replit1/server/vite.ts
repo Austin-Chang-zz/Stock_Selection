@@ -8,6 +8,11 @@ import { nanoid } from "nanoid";
 
 const viteLogger = createLogger();
 
+/**
+ * Custom logging function with formatted timestamps
+ * @param message - Log message
+ * @param source - Source identifier for the log
+ */
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -19,6 +24,12 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
+/**
+ * Sets up Vite development server with HMR (Hot Module Replacement)
+ * Only used in development mode
+ * @param app - Express application instance
+ * @param server - HTTP server instance
+ */
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
@@ -26,6 +37,7 @@ export async function setupVite(app: Express, server: Server) {
     allowedHosts: true as const,
   };
 
+  // Create Vite server in middleware mode
   const vite = await createViteServer({
     ...viteConfig,
     configFile: false,
@@ -33,14 +45,17 @@ export async function setupVite(app: Express, server: Server) {
       ...viteLogger,
       error: (msg, options) => {
         viteLogger.error(msg, options);
-        process.exit(1);
+        process.exit(1); // Exit on Vite errors during development
       },
     },
     server: serverOptions,
     appType: "custom",
   });
 
+  // Use Vite's connect instance as middleware
   app.use(vite.middlewares);
+
+  // Handle all other routes by serving the React SPA
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 
@@ -52,12 +67,14 @@ export async function setupVite(app: Express, server: Server) {
         "index.html",
       );
 
-      // always reload the index.html file from disk incase it changes
+      // Always reload index.html from disk in case it changes during development
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
+      // Add cache busting query parameter to main.tsx
       template = template.replace(
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
+      // Transform HTML with Vite (injects HMR client, etc.)
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
@@ -67,6 +84,10 @@ export async function setupVite(app: Express, server: Server) {
   });
 }
 
+/**
+ * Serves static files from the built React app in production
+ * @param app - Express application instance
+ */
 export function serveStatic(app: Express) {
   const distPath = path.resolve(import.meta.dirname, "public");
 
@@ -76,9 +97,10 @@ export function serveStatic(app: Express) {
     );
   }
 
+  // Serve static files from the built React app
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
+  // Fall through to index.html for SPA routing (client-side routing)
   app.use("*", (_req, res) => {
     res.sendFile(path.resolve(distPath, "index.html"));
   });
