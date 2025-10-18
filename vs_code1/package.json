@@ -112,5 +112,9 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
-  }
+  },
+  "description": "簡短說明",
+  "main": "postcss.config.js",
+  "keywords": [],
+  "author": ""
 }
