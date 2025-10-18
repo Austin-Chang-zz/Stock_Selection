@@ -1,5 +1,5 @@
 import express from 'express';
-const { Request, Response } = express;
+import type { Request, Response } from 'express';
 
 const app = express();
 app.use(express.json());

@@ -9,8 +9,8 @@
     // See also https://aka.ms/tsconfig/module
     // "module": "nodenext",
     "target": "ES2020", // modern JS output
-    "module": "ESNext", // needed for Node.js
-    "moduleResolution": "Bundler",
+    "module": "NodeNext", // needed for Node.js
+    "moduleResolution": "NodeNext",
     "rootDir": "src", // where your .ts files live
     "outDir": "dist", // compiled JS output folder
     "esModuleInterop": true, // allow 'import express from'
