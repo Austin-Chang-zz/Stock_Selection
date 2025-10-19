@@ -8,6 +8,10 @@ const mockUsers = [
     { id: 1, useranme: "anson", displayname: "Anson" },
     { id: 2, useranme: "jack", displayname: "Jack" },
     { id: 3, useranme: "adam", displayname: "Adam" },
+    { id: 4, useranme: "tina", displayname: "Tina" },
+    { id: 5, useranme: "jason", displayname: "Jason" },
+    { id: 6, useranme: "henry", displayname: "Henry" },
+    { id: 7, useranme: "marilyn", displayname: "Marilyn" },
 ];
 
 // app.get("/", (request, response) => {
@@ -21,6 +25,7 @@ app.get("/", (request, response) => {
 
 //make route
 app.get("/api/users", (request, response) => {
+    console.log(request,query);
     response.send(mockUsers);
 });
 
