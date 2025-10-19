@@ -1,6 +1,10 @@
 import express, { request, response } from "express";
 
 const app = express();
+// 添加中間件來解析 JSON 請求體
+app.use(express.json());
+// 添加中間件來解析 URL 編碼的請求體
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
@@ -14,18 +18,19 @@ const mockUsers = [
     { id: 7, useranme: "marilyn", displayname: "Marilyn" },
 ];
 
+// Simple text response
 // app.get("/", (request, response) => {
 //     response.send("Hello, World");
 // });
 
-// send msg object 
+// send JSON object response
 app.get("/", (request, response) => {
-    response.status(201).send({msg: "Hello"});
+    response.status(200).send({msg: "Hello"});
 });
 
 //make route
 app.get("/api/users", (request, response) => {
-    console.log(request,query);
+    console.log(request.query);
     response.send(mockUsers);
 });
 
