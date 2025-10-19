@@ -33,8 +33,8 @@ app.get("/api/users/:id", (request, response) => {
     //print out the status 400 if not a number
     if (isNaN(parsedId)) return response.status(400).send({ msg: "Bad Request. Invalid" });
 
-    const findUser = mockUsers.find(user) => user.id === parsedId;
-    if (!findUsers) return response.sendStatus(404);
+    const findUser = mockUsers.find((user) => user.id === parsedId);
+    if (!findUser) return response.sendStatus(404);
     return response.send(findUser);
 
 });
