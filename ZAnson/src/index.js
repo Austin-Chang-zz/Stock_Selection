@@ -31,7 +31,19 @@ app.get("/", (request, response) => {
 //make route
 app.get("/api/users", (request, response) => {
     console.log(request.query);
-    response.send(mockUsers);
+    const {
+        query: { filter, value },
+    } = request;
+    //when filter and value are undefined
+    if (!filter && !value) response.send(mockUsers);   
+    //-------------not working?--------------------because includes problem
+    if (filter && value)
+        return response.send(
+            mockUsers.filter((user) => user[filter].includes(value))
+        );
+    
+    return response.send(mockUsers);
+    
 });
 
 app.get("/api/users/:id", (request, response) => {
