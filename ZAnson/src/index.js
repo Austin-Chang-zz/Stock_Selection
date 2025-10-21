@@ -10,13 +10,13 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 
 const mockUsers = [
-    { id: 1, useranme: "anson", displayname: "Anson" },
-    { id: 2, useranme: "jack", displayname: "Jack" },
-    { id: 3, useranme: "adam", displayname: "Adam" },
-    { id: 4, useranme: "tina", displayname: "Tina" },
-    { id: 5, useranme: "jason", displayname: "Jason" },
-    { id: 6, useranme: "henry", displayname: "Henry" },
-    { id: 7, useranme: "marilyn", displayname: "Marilyn" },
+    { id: 1, username: "anson", displayname: "Anson" },
+    { id: 2, username: "jack", displayname: "Jack" },
+    { id: 3, username: "adam", displayname: "Adam" },
+    { id: 4, username: "tina", displayname: "Tina" },
+    { id: 5, username: "jason", displayname: "Jason" },
+    { id: 6, username: "henry", displayname: "Henry" },
+    { id: 7, username: "marilyn", displayname: "Marilyn" },
 ];
 
 // Simple text response
@@ -37,7 +37,7 @@ app.post("/api/users",
         //define a new user begin from the last user id + body
         const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...body }; 
         mockUsers.push(newUser);
-        console.log(request.body);
+        console.log(req.body);
     return response.status(201).send(newUser);
     }
 );
@@ -63,41 +63,41 @@ app.get("/api/products", (request, response) => {
 
 //put request
 app.put("/api/users/:id",
-    (req, res) => {
+    (request, response) => {
         //define request format , all body by id
-        const {body,params: { id },} = req;
+        const {body,params: { id },} = request;
         const parsedId = parseInt(id);
         //check the correct id as body index
         if (isNaN(parsedId))
-            return res.sendStatus(400);  //bad request
+            return response.sendStatus(400);  //bad request
         const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
         //find the correct index and body
         if (findUserIndex === -1)
-            return res.sendStatus(404); //not found
+            return response.sendStatus(404); //not found
         mockUsers[findUserIndex] = { id: parsedId, ...body };
 
     //send correct request body
-    return res.sendStatus(200); //OK
+    return response.sendStatus(200); //OK
     }
 );
 
 
 //patch request (only change some field of body)
 app.patch("/api/users/:id",
-    (req, res) => {
+    (request, response) => {
         //define request format , all body by id
-        const { body, params: { id }, } = req;
+        const { body, params: { id }, } = request;
         const parsedId = parseInt(id);
         //check the correct id as body index
         if (isNaN(parsedId))    
-            return res.sendStatus(400);  //bad request
+            return response.sendStatus(400);  //bad request
         const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
         //find the correct index and body
         if (findUserIndex === -1)
-            return res.sendStatus(404); //not found
+            return response.sendStatus(404); //not found
         mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body }
-    
-        return response.sendStatus(200);
+        
+    return response.sendStatus(200);
     }
 );
 
@@ -109,8 +109,9 @@ app.get("/api/users", (request, response) => {
         query: { filter, value },
     } = request;
     //when filter and value are undefined
-    if (!filter && !value) response.send(mockUsers);
-    //-------------not working?--------------------because includes problem
+    if (!filter && !value)
+        return response.send(mockUsers);
+
     if (filter && value)
         return response.send(
             mockUsers.filter((user) => user[filter].includes(value))
