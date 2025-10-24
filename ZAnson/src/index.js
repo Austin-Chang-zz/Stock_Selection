@@ -1,5 +1,6 @@
 import express, { request, response } from "express";
-import { query,validationResult,body} from "express-validator";
+import { query, validationResult, body, matchedData, checkSchema } from "express-validator";
+import {createUserValidationSchema} from "./utils/validateSchemas.js"
 
 const app = express();
 
@@ -102,23 +103,20 @@ app.use(loggingMiddleware, (request, response, next) => {
 });
 
 //post a new user body as feedback of request
-app.post("/api/users",
-    body("username")
-        .notEmpty()
-        .withMessage("username can not be empty")
-        .isLength({ min: 5, max: 32 })
-        .withMessage("User name must be between 5-32 characters")
-        .isString()
-        .withMessage("Username must be a string"),
-    body("displayName").notEmpty(),
+app.post("/api/users", checkSchema(createUserValidationSchema),
     (request, response) => {
         const result = validationResult(request);
         console.log(result);
-        const { body } = request;  //request a body
+
+        if (!result.isEmpty())
+            return response.status(400).send({errors: result.array() });
+        
+        const data = matchedData(request);
+        console.log(data);
+        // const { body } = request;  //request a body
         //define a new user begin from the last user id + body
-        const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...body }; 
+        const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }; 
         mockUsers.push(newUser);
-        console.log(request.body);
     return response.status(201).send(newUser);
     }
 );
