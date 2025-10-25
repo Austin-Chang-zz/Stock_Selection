@@ -1,11 +1,21 @@
 import express, { request, response } from "express";
-import { query, validationResult, body, matchedData, checkSchema } from "express-validator";
+import {
+    query,
+    validationResult,
+    body,
+    matchedData,
+    checkSchema,
+} from "express-validator";
 import {createUserValidationSchema} from "./utils/validateSchemas.js"
-
+import userRouter from "./routes/users.js";
+import { mockUsers } from "./utils/constents.js";
 const app = express();
 
 // 添加中間件(middleware)來解析 JSON 請求體
 app.use(express.json());
+
+app.use(userRouter);
+
 const loggingMiddleware = (request, response, next) => {
     console.log(`${request.method} - ${request.url}`);
     next();
@@ -35,16 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
-const mockUsers = [
-    { id: 1, username: "anson", displayname: "Anson" },
-    { id: 2, username: "jack", displayname: "Jack" },
-    { id: 3, username: "adam", displayname: "Adam" },
-    { id: 4, username: "tina", displayname: "Tina" },
-    { id: 5, username: "jason", displayname: "Jason" },
-    { id: 6, username: "henry", displayname: "Henry" },
-    { id: 7, username: "marilyn", displayname: "Marilyn" },
-];
-
+app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
 // Simple text response
 // app.get("/", (request, response) => {
 //     response.send("Hello, World");
@@ -171,4 +172,3 @@ app.delete("/api/users/:id", resolveIndexByUserID,
 // app.listen(PORT, () => {
 //     console.log('running on Port ${PORT}');
 // });
-app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
