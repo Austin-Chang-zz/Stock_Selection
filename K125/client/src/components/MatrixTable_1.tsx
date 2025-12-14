@@ -549,9 +549,10 @@ export default function MatrixTable({ title, data, onStockClick, onAddToTargetLi
         <div className="flex items-center gap-2">
         </div>
       </div>
-      <div className="flex-1 overflow-auto">
+      {/* Frozen Header - Outside scroll container */}
+      <div className="border-t bg-card">
         <Table className="w-max min-w-full">
-          <TableHeader className="sticky top-0 z-10 bg-card">
+          <TableHeader>
             <TableRow className="bg-muted/30 hover:bg-muted/30">
               {/* Index Column Header */}
               <TableHead className="font-semibold text-xs h-9 text-center bg-muted/30" style={{ width: '36px', minWidth: '36px' }}>
@@ -710,6 +711,11 @@ export default function MatrixTable({ title, data, onStockClick, onAddToTargetLi
               })}
             </TableRow>
           </TableHeader>
+        </Table>
+      </div>
+      {/* Scrollable Data Container */}
+      <div className="flex-1 overflow-auto">
+        <Table className="w-max min-w-full">
           <TableBody>
             {sortedData.map((stock, rowIndex) => {
               const renderCell = (colId: ColumnId) => {
@@ -869,8 +875,8 @@ export default function MatrixTable({ title, data, onStockClick, onAddToTargetLi
                   </ContextMenuTrigger>
                   <ContextMenuContent className="w-56">
                     <ContextMenuItem onClick={() => {
-                        if (onStockClick) onStockClick(stock);
-                      }} data-testid={`menu-viewchart-${stock.code}`}>
+                      if (onStockClick) onStockClick(stock);
+                    }} data-testid={`menu-viewchart-${stock.code}`}>
                       <LineChart className="w-4 h-4 mr-2" />
                       View Chart
                     </ContextMenuItem>

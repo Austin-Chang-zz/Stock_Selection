@@ -1,10 +1,19 @@
 import { useState, useEffect } from "react";
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import MarketStatusBadge from "./MarketStatusBadge";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeToggle } from "./ThemeToggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface TopBarProps {
   notificationCount?: number;
@@ -18,11 +27,11 @@ export default function TopBar({ notificationCount = 0 }: TopBarProps) {
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now);
-      
+
       const hour = now.getHours();
       const minute = now.getMinutes();
       const timeInMinutes = hour * 60 + minute;
-      
+
       if (timeInMinutes >= 540 && timeInMinutes < 810) {
         setMarketStatus('trading');
       } else if (timeInMinutes >= 510 && timeInMinutes < 540) {
@@ -64,6 +73,7 @@ export default function TopBar({ notificationCount = 0 }: TopBarProps) {
       </div>
 
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         <Button 
           variant="ghost" 
           size="icon"
@@ -81,6 +91,21 @@ export default function TopBar({ notificationCount = 0 }: TopBarProps) {
             </Badge>
           )}
         </Button>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" data-testid="button-user-menu">
+                <User className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
       </div>
     </header>
   );
