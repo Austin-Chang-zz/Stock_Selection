@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock App Replica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+            background-color: #000000;
+        }
+
+        /* Hide scrollbar for horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="text-white pb-24">
+
+    <!-- Top Status Bar (Mockup) -->
+    <div class="bg-[#1c1c1e] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+        <span>19:51</span>
+        <div class="flex gap-1">
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-three-quarters"></i>
+        </div>
+    </div>
+
+    <!-- Header / Tabs -->
+    <div class="bg-[#1c1c1e] sticky top-0 z-50">
+        <div class="flex items-center justify-between px-3 py-2">
+            <div class="flex gap-4 items-center">
+                <i class="fas fa-search text-xl"></i>
+                <i class="fas fa-play-circle text-xl"></i>
+            </div>
+            <div class="flex gap-6 text-sm font-bold">
+                <div class="relative py-2 text-white">
+                    存股評估
+                    <div class="absolute bottom-0 left-0 w-full h-0.5 bg-teal-400"></div>
+                </div>
+                <div class="py-2 text-gray-400">價差評估</div>
+            </div>
+            <div>
+                <i class="fas fa-filter text-xl"></i>
+            </div>
+        </div>
+
+        <!-- Announcement Bar -->
+        <div class="bg-[#2a6b6b] px-3 py-2 flex justify-between items-center text-sm">
+            <div class="flex items-center gap-2 overflow-hidden">
+                <i class="fas fa-bullhorn transform -rotate-12"></i>
+                <span class="truncate">《不敗存股術 APP》全功能解鎖...</span>
+            </div>
+            <i class="fas fa-times"></i>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="bg-[#1c1c1e] px-3 py-3 flex gap-3 overflow-x-auto no-scrollbar border-b border-gray-800">
+            <button
+                class="bg-[#5cdbd3] text-black px-4 py-1.5 rounded-md text-sm font-bold whitespace-nowrap">穩健配息股</button>
+            <button
+                class="bg-[#3a3a3c] text-gray-300 px-4 py-1.5 rounded-md text-sm font-bold whitespace-nowrap">金融股</button>
+            <button
+                class="bg-[#3a3a3c] text-gray-300 px-4 py-1.5 rounded-md text-sm font-bold whitespace-nowrap">ETF</button>
+            <button
+                class="bg-[#3a3a3c] text-gray-300 px-4 py-1.5 rounded-md text-sm font-bold whitespace-nowrap">陳老師動態</button>
+        </div>
+
+        <!-- Table Headers -->
+        <div class="grid grid-cols-10 bg-[#2c2c2e] py-2 px-2 text-xs text-gray-400 border-b border-gray-700">
+            <div class="col-span-2 flex items-center">股票 <i class="fas fa-sort ml-1"></i></div>
+            <div class="col-span-2 flex items-center justify-end pr-2">股價 <i class="fas fa-sort ml-1"></i></div>
+            <div class="col-span-4 flex items-center pl-2"><i class="far fa-question-circle mr-1"></i> 價值評估 <i
+                    class="fas fa-sort ml-1"></i></div>
+            <div class="col-span-2 flex flex-col items-end leading-tight">
+                <span>法人預估</span>
+                <span>殖利率(%)<i class="fas fa-caret-down ml-1"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock List Content -->
+    <div class="divide-y divide-gray-800 bg-black">
+
+        <!-- Row 1: 華通 (Expensive) -->
+        <div class="grid grid-cols-10 py-3 px-2 items-center">
+            <!-- Name -->
+            <div class="col-span-2">
+                <div class="text-base font-bold text-white">華通</div>
+                <div class="text-xs text-gray-400">2313</div>
+            </div>
+            <!-- Price -->
+            <div class="col-span-2 text-right pr-2">
+                <div class="text-base font-bold text-[#ff4d4f]">91.00</div>
+                <div class="text-xs text-[#ff4d4f]">(+6.56%)</div>
+            </div>
+            <!-- Evaluation (Complex) -->
+            <div class="col-span-4 flex items-center gap-1 pl-1">
+                <div class="flex flex-col text-[10px] text-gray-400 gap-[1px]">
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-gray-600 text-white flex items-center justify-center text-[8px]">便</span>
+                        37.52</div>
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-gray-600 text-white flex items-center justify-center text-[8px]">合</span>
+                        49.72</div>
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-[#f5222d] text-white flex items-center justify-center text-[8px]">貴</span>
+                        62.04</div>
+                </div>
+                <div
+                    class="bg-[#f759ab] text-white text-xs font-bold px-1 py-3 rounded-md leading-none flex flex-col items-center justify-center h-full ml-auto mr-2">
+                    <span>&gt;昂貴</span>
+                </div>
+            </div>
+            <!-- Yield -->
+            <div class="col-span-2 text-right text-base font-bold">2.27</div>
+        </div>
+
+        <!-- Row 2: 智邦 (Expensive) -->
+        <div class="grid grid-cols-10 py-3 px-2 items-center">
+            <div class="col-span-2">
+                <div class="text-base font-bold text-white">智邦</div>
+                <div class="text-xs text-gray-400">2345</div>
+            </div>
+            <div class="col-span-2 text-right pr-2">
+                <div class="text-base font-bold text-[#ff4d4f]">1,210</div>
+                <div class="text-xs text-[#ff4d4f]">(+4.76%)</div>
+            </div>
+            <div class="col-span-4 flex items-center gap-1 pl-1">
+                <div class="flex flex-col text-[10px] text-gray-400 gap-[1px]">
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-gray-600 text-white flex items-center justify-center text-[8px]">便</span>
+                        223.9</div>
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-gray-600 text-white flex items-center justify-center text-[8px]">合</span>
+                        322.0</div>
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-[#f5222d] text-white flex items-center justify-center text-[8px]">貴</span>
+                        436.2</div>
+                </div>
+                <div
+                    class="bg-[#f759ab] text-white text-xs font-bold px-1 py-3 rounded-md leading-none flex flex-col items-center justify-center h-full ml-auto mr-2">
+                    <span>&gt;昂貴</span>
+                </div>
+            </div>
+            <div class="col-span-2 text-right text-base font-bold">2.05</div>
+        </div>
+
+        <!-- Row 3: 台塑化 (Cheap) -->
+        <div class="grid grid-cols-10 py-3 px-2 items-center">
+            <div class="col-span-2">
+                <div class="text-base font-bold text-white">台塑化</div>
+                <div class="text-xs text-gray-400">6505</div>
+            </div>
+            <div class="col-span-2 text-right pr-2">
+                <div class="text-base font-bold text-[#ff4d4f]">50.20</div>
+                <div class="text-xs text-[#ff4d4f]">(+2.87%)</div>
+            </div>
+            <div class="col-span-4 flex items-center gap-1 pl-1">
+                <div class="flex flex-col text-[10px] text-gray-400 gap-[1px]">
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-[#1890ff] text-white flex items-center justify-center text-[8px]">便</span>
+                        71.77</div>
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-gray-600 text-white flex items-center justify-center text-[8px]">合</span>
+                        87.76</div>
+                    <div class="flex items-center gap-1"><span
+                            class="w-3.5 h-3.5 rounded-full bg-gray-600 text-white flex items-center justify-center text-[8px]">貴</span>
+                        102.8</div>
+                </div>
+                <div
+                    class="bg-[#40a9ff] text-white text-xs font-bold px-1 py-3 rounded-md leading-none flex flex-col items-center justify-center h-full ml-auto mr-2">
+                    <span>&lt;便宜</span>
+                </div>
+            </div>
+            <div class="col-span-2 text-right text-base font-bold">4.38</div>
+        </div>
+
+        <!-- Row 4: 遠雄 (Locked) -->
+        <div class="grid grid-cols-10 py-3 px-2 items-center">
+            <div class="col-span-2">
+                <div class="text-base font-bold text-white">遠雄</div>
+                <div class="text-xs text-gray-400">5522</div>
+            </div>
+            <div class="col-span-2 text-right pr-2">
+                <div class="text-base font-bold text-[#ff4d4f]">63.00</div>
+                <div class="text-xs text-[#ff4d4f]">(+2.61%)</div>
+            </div>
+            <div class="col-span-4 flex items-center justify-center">
+                <div class="text-[#fbbf24] bg-yellow-900/30 p-2 rounded-lg">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+            <div class="col-span-2 flex items-center justify-end">
+                <div class="text-[#fbbf24] bg-yellow-900/30 p-2 rounded-lg">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 5: 統一實 (Locked) -->
+        <div class="grid grid-cols-10 py-3 px-2 items-center">
+            <div class="col-span-2">
+                <div class="text-base font-bold text-white">統一實</div>
+                <div class="text-xs text-gray-400">9907</div>
+            </div>
+            <div class="col-span-2 text-right pr-2">
+                <div class="text-base font-bold text-[#ff4d4f]">18.50</div>
+                <div class="text-xs text-[#ff4d4f]">(+1.65%)</div>
+            </div>
+            <div class="col-span-4 flex items-center justify-center">
+                <div class="text-[#fbbf24] bg-yellow-900/30 p-2 rounded-lg">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+            <div class="col-span-2 flex items-center justify-end">
+                <div class="text-[#fbbf24] bg-yellow-900/30 p-2 rounded-lg">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 6: 群益證 (Locked) -->
+        <div class="grid grid-cols-10 py-3 px-2 items-center">
+            <div class="col-span-2">
+                <div class="text-base font-bold text-white">群益證</div>
+                <div class="text-xs text-gray-400">6005</div>
+            </div>
+            <div class="col-span-2 text-right pr-2">
+                <div class="text-base font-bold text-[#ff4d4f]">25.10</div>
+                <div class="text-xs text-[#ff4d4f]">(+1.21%)</div>
+            </div>
+            <div class="col-span-4 flex items-center justify-center">
+                <div class="text-[#fbbf24] bg-yellow-900/30 p-2 rounded-lg">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+            <div class="col-span-2 flex items-center justify-end">
+                <div class="text-[#fbbf24] bg-yellow-900/30 p-2 rounded-lg">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Info Bar -->
+    <div
+        class="fixed bottom-[60px] w-full bg-[#1c1c1e] text-xs py-2 px-3 flex justify-between items-center border-t border-gray-800 z-40">
+        <div>
+            加權指數 <span class="text-[#ff4d4f]">28198.02 ▲ 173.27 (+0.62%)</span>
+        </div>
+        <div>
+            總量 4748.07 億 <i class="fas fa-chevron-right text-gray-500 text-[10px]"></i>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div
+        class="fixed bottom-0 w-full bg-[#2c2c2e] flex justify-between items-center pt-2 pb-1 px-4 border-t border-gray-700 z-50">
+        <div class="flex flex-col items-center gap-1 text-[#5cdbd3]">
+            <div class="bg-[#5cdbd3] p-1 rounded-md text-black">
+                <i class="fas fa-chart-line text-sm"></i>
+            </div>
+            <span class="text-[10px]">選股</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fas fa-balance-scale text-xl"></i>
+            <span class="text-[10px]">比較模型</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 text-gray-400 -mt-6">
+            <div
+                class="bg-gray-200 text-[#2c2c2e] w-10 h-10 rounded-full flex items-center justify-center border-4 border-[#2c2c2e]">
+                <i class="fas fa-plus text-lg"></i>
+            </div>
+            <span class="text-[10px]">自選股</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fas fa-comment-dots text-xl"></i>
+            <span class="text-[10px]">社團</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fas fa-star text-xl"></i>
+            <span class="text-[10px]">不敗學院</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 text-gray-400">
+            <i class="fas fa-ellipsis-h text-xl"></i>
+            <span class="text-[10px]">更多</span>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Stock UI Mock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* custom colors close to the screenshot */
+        .bg-main-top {
+            background: #111111;
+        }
+
+        .bg-second-top {
+            background: #2b2f36;
+        }
+
+        .bg-tag-bar {
+            background: #118a93;
+        }
+
+        .bg-card-dark {
+            background: #050608;
+        }
+
+        .bg-chip-red {
+            background: #e6507a;
+        }
+
+        .bg-chip-blue {
+            background: #66c1ea;
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white min-h-screen flex justify-center">
+    <!-- phone frame -->
+    <div class="w-[400px] max-w-full h-screen bg-black text-white flex flex-col">
+
+        <!-- status bar (simplified) -->
+        <div class="bg-main-top text-xs px-3 py-2 flex justify-between items-center">
+            <span>19:51</span>
+            <div class="flex items-center space-x-1 text-gray-300">
+                <span>●●●</span>
+                <span>81%</span>
+            </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="bg-second-top px-3 py-2 text-sm flex items-center space-x-4">
+            <button class="text-xl">🔍</button>
+            <button class="text-xl">▶</button>
+            <div class="flex-1 flex justify-center space-x-6">
+                <button class="border-b-2 border-white pb-1">存股評估</button>
+                <button class="text-gray-400">價差評估</button>
+            </div>
+            <button class="text-xl">⛃</button>
+        </div>
+
+        <!-- teal bar -->
+        <div class="bg-tag-bar px-3 py-1 text-sm">
+            <span>找看看！ 《不敗存股術 AI》</span>
+        </div>
+
+        <!-- category chips -->
+        <div class="bg-second-top px-3 py-3 flex space-x-3 text-sm overflow-x-auto">
+            <button class="px-4 py-2 rounded-lg bg-teal-500 text-black font-semibold whitespace-nowrap">穩健配息股</button>
+            <button class="px-4 py-2 rounded-lg bg-gray-700 whitespace-nowrap">金融股</button>
+            <button class="px-4 py-2 rounded-lg bg-gray-700 whitespace-nowrap">ETF</button>
+            <button class="px-4 py-2 rounded-lg bg-gray-700 whitespace-nowrap">陳老師動能</button>
+        </div>
+
+        <!-- header row -->
+        <div class="bg-second-top px-3 py-2 text-xs flex justify-between text-gray-300">
+            <div class="w-1/3">股票 ▼</div>
+            <div class="w-1/3 text-center">股價 ▼ / 價值評估</div>
+            <div class="w-1/3 text-right">殖利率(%)</div>
+        </div>
+
+        <!-- list -->
+        <div class="flex-1 overflow-y-auto bg-black text-sm">
+
+            <!-- row 1 -->
+            <div class="border-b border-gray-800 bg-card-dark px-3 py-3 flex items-center">
+                <div class="w-1/3">
+                    <div class="text-lg">華通</div>
+                    <div class="text-gray-400 text-xs">2313</div>
+                </div>
+                <div class="w-1/3 text-right pr-3">
+                    <div class="text-red-400 text-xl">91.00</div>
+                    <div class="text-red-400 text-xs">(+6.56%)</div>
+
+                    <div class="mt-2 flex items-center justify-end space-x-1 text-xs">
+                        <div class="flex flex-col text-gray-400 text-[11px]">
+                            <span>便 37.52</span>
+                            <span>合 49.72</span>
+                            <span class="text-pink-400">貴 62.04</span>
+                        </div>
+                        <div class="bg-chip-red text-white rounded-2xl px-3 py-2 text-sm font-semibold">
+                            &gt;昂貴
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/3 text-right text-lg">
+                    2.27
+                </div>
+            </div>
+
+            <!-- row 2 -->
+            <div class="border-b border-gray-800 bg-card-dark px-3 py-3 flex items-center">
+                <div class="w-1/3">
+                    <div class="text-lg">智邦</div>
+                    <div class="text-gray-400 text-xs">2345</div>
+                </div>
+                <div class="w-1/3 text-right pr-3">
+                    <div class="text-red-400 text-xl">1,210</div>
+                    <div class="text-red-400 text-xs">(+4.76%)</div>
+
+                    <div class="mt-2 flex items-center justify-end space-x-1 text-xs">
+                        <div class="flex flex-col text-gray-400 text-[11px]">
+                            <span>便 223.94</span>
+                            <span>合 322.09</span>
+                            <span class="text-pink-400">貴 436.21</span>
+                        </div>
+                        <div class="bg-chip-red text-white rounded-2xl px-3 py-2 text-sm font-semibold">
+                            &gt;昂貴
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/3 text-right text-lg">
+                    2.05
+                </div>
+            </div>
+
+            <!-- row 3 -->
+            <div class="border-b border-gray-800 bg-card-dark px-3 py-3 flex items-center">
+                <div class="w-1/3">
+                    <div class="text-lg">台塑化</div>
+                    <div class="text-gray-400 text-xs">6505</div>
+                </div>
+                <div class="w-1/3 text-right pr-3">
+                    <div class="text-red-400 text-xl">50.20</div>
+                    <div class="text-red-400 text-xs">(+2.87%)</div>
+
+                    <div class="mt-2 flex items-center justify-end space-x-1 text-xs">
+                        <div class="flex flex-col text-gray-400 text-[11px]">
+                            <span>便 <span class="text-sky-300">71.77</span></span>
+                            <span>合 87.76</span>
+                            <span>貴 102.85</span>
+                        </div>
+                        <div class="bg-chip-blue text-white rounded-2xl px-3 py-2 text-sm font-semibold">
+                            &lt;便宜
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/3 text-right text-lg">
+                    4.38
+                </div>
+            </div>
+
+            <!-- rows with lock icon -->
+            <template id="lock-row">
+                <div class="border-b border-gray-800 bg-card-dark px-3 py-3 flex items-center">
+                    <div class="w-1/3">
+                        <div class="text-lg">遠雄</div>
+                        <div class="text-gray-400 text-xs">5522</div>
+                    </div>
+                    <div class="w-1/3 text-right pr-3">
+                        <div class="text-red-400 text-xl">63.00</div>
+                        <div class="text-red-400 text-xs">(+2.61%)</div>
+                    </div>
+                    <div class="w-1/3 text-right text-2xl">
+                        🔒
+                    </div>
+                </div>
+            </template>
+
+            <div id="lock-container"></div>
+
+        </div>
+
+        <!-- market bar -->
+        <div class="bg-second-top px-3 py-2 text-xs flex justify-between items-center">
+            <div>
+                加權指數 <span class="text-red-400">28198.02 ▲173.27(+0.62%)</span>
+            </div>
+            <div>總量 4748.07 億 &gt;</div>
+        </div>
+
+        <!-- bottom nav -->
+        <div class="bg-main-top px-3 py-2 text-xs flex justify-between text-gray-300">
+            <div class="flex flex-col items-center text-teal-400">
+                <span>⬈</span><span>選股</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span>ETF</span><span>比較模型</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span>＋</span><span>自選股</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span>▢</span><span>社團</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span>★</span><span>不敗學院</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span>⋯</span><span>更多</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // duplicate lock rows quickly
+        const tmpl = document.getElementById('lock-row');
+        const container = document.getElementById('lock-container');
+        ['遠雄 5522 63.00 (+2.61%)', '統一實 9907 18.50 (+1.65%)', '群益證 6005 25.10 (+1.21%)']
+            .forEach((_, i) => {
+                const node = tmpl.content.cloneNode(true);
+                const left = node.querySelector('.w-1/3 div.text-lg');
+                const code = node.querySelector('.w-1/3 .text-gray-400');
+                const price = node.querySelector('.text-red-400.text-xl');
+                const change = node.querySelector('.text-red-400.text-xs');
+                if (i === 1) { left.textContent = '統一實'; code.textContent = '9907'; price.textContent = '18.50'; change.textContent = '(+1.65%)'; }
+                if (i === 2) { left.textContent = '群益證'; code.textContent = '6005'; price.textContent = '25.10'; change.textContent = '(+1.21%)'; }
+                container.appendChild(node);
+            });
+    </script>
+</body>
+
+</html>
