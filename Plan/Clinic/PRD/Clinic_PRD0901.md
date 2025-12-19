@@ -1,4 +1,4 @@
-## Product Requirement Document (PRD): Clinlic Customer Relation Management (CRM) System
+## Product Requirement Document (PRD): Clinic Customer Relation Management (CRM) System
 
 
 
@@ -10,13 +10,15 @@
 
 ### 1. Overview & Vision
 
-if I am going to run a medical beauty clinclic, I plan to develop a mobile phone app which has the goals as followings:
+Developing a general usage mobile app for different clinics like Pediatrics,Otolaryngology,Dental clinics. But start with medical beauty clinic. This mobile app has goals as followings:
 
 #### A customer reservation and booking system :
-  - a monthly and weekly calendar
-  - customer can book the specific doctor's time slot and get confirmation.
+  - a bi-weekly calendar, only can be booked this current week and next week.
+  - There are two reservation booking ways:
+    - customer can book the specific doctor's time slot and get a serial number.
+    - customer can book the specific doctor's time period for longer treatment.
   -  If doctor move the time slot, system will notify the customer and request customer redo the book job.
-  -  If customer cancel the book, the system can free the time slot for other customers.
+  -  If customer cancel the book, the system can free the time slot or time periiod for other customers.
   -  Others
 #### Customer treatment records
 - highlight the treatment history in app for customer reference.
@@ -31,6 +33,7 @@ if I am going to run a medical beauty clinclic, I plan to develop a mobile phone
 
 #### Treatment pool
 - list out what kinds of treatment and advantage.
+- Clinic employee can edit the treatment methods and related information with more authentification.
 - Others
 
 #### Notification
@@ -39,7 +42,7 @@ if I am going to run a medical beauty clinclic, I plan to develop a mobile phone
 - Others
 
 #### Inventory Control
-- A backend inventory control only used by clinlic employees, but not customer
+- A backend inventory control only used by clinic employees, but not customer
 - Others
 
 #### Payment system
@@ -48,7 +51,8 @@ if I am going to run a medical beauty clinclic, I plan to develop a mobile phone
 - Others
 
 #### Authentification
-- Registration and Log in/out
+- Customer registration and Log in/out
+- Employees have more strict authentification log in/out.
 - Others
 
 #### Navigation bar
