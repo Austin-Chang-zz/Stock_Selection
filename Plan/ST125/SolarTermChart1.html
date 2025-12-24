@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Terms Chart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-8">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full">
+        <h1 class="text-3xl font-bold text-gray-800 text-center mb-8">Solar Terms Chart</h1>
+
+        <div class="flex justify-center">
+            <!-- Expanded viewBox from 0 0 600 600 to -50 -50 700 700 to provide padding for labels -->
+            <svg width="700" height="700" viewBox="-50 -50 700 700" class="max-w-full h-auto">
+                <!-- Center point -->
+                <circle cx="300" cy="300" r="3" fill="#374151" />
+
+                <!-- Outer circle -->
+                <circle cx="300" cy="300" r="200" fill="none" stroke="#374151" stroke-width="2" />
+
+                <!-- Rotated all axes 90° counterclockwise: Summer Solstice now at top, Winter Solstice at bottom -->
+                <!-- Summer Solstice (0°, top) -->
+                <line x1="300" y1="300" x2="300" y2="100" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Start of Autumn (45°) -->
+                <line x1="300" y1="300" x2="441.42" y2="158.58" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Autumn Equinox (90°, right) -->
+                <line x1="300" y1="300" x2="500" y2="300" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Start of Winter (135°) -->
+                <line x1="300" y1="300" x2="441.42" y2="441.42" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Winter Solstice (180°, bottom) -->
+                <line x1="300" y1="300" x2="300" y2="500" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Start of Spring (225°) -->
+                <line x1="300" y1="300" x2="158.58" y2="441.42" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Spring Equinox (270°, left) -->
+                <line x1="300" y1="300" x2="100" y2="300" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Start of Summer (315°) -->
+                <line x1="300" y1="300" x2="158.58" y2="158.58" stroke="#6366f1" stroke-width="1.5" />
+
+                <!-- Updated label positions to match rotated axes -->
+                <!-- Summer Solstice (top) -->
+                <text x="300" y="80" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2937">Summer
+                    Solstice</text>
+
+                <!-- Start of Autumn (top-right) -->
+                <text x="460" y="145" text-anchor="start" font-size="14" font-weight="600" fill="#1f2937">Start of
+                    Autumn</text>
+
+                <!-- Autumn Equinox (right) -->
+                <text x="520" y="305" text-anchor="start" font-size="14" font-weight="600" fill="#1f2937">Autumn
+                    Equinox</text>
+
+                <!-- Start of Winter (bottom-right) -->
+                <text x="460" y="465" text-anchor="start" font-size="14" font-weight="600" fill="#1f2937">Start of
+                    Winter</text>
+
+                <!-- Winter Solstice (bottom) -->
+                <text x="300" y="535" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2937">Winter
+                    Solstice</text>
+
+                <!-- Start of Spring (bottom-left) -->
+                <text x="140" y="465" text-anchor="end" font-size="14" font-weight="600" fill="#1f2937">Start of
+                    Spring</text>
+
+                <!-- Spring Equinox (left) -->
+                <text x="80" y="305" text-anchor="end" font-size="14" font-weight="600" fill="#1f2937">Spring
+                    Equinox</text>
+
+                <!-- Start of Summer (top-left) -->
+                <text x="140" y="145" text-anchor="end" font-size="14" font-weight="600" fill="#1f2937">Start of
+                    Summer</text>
+            </svg>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -7,8 +7,9 @@
 | Date       | Version | Description | Author |
 | ---------- | ------- | ----------- | ------ |
 | 2025-12-18 | 0.90.1  | Initial PRD | Austin |
+| 2025-12-19 | 0.90.2  | Rewrite by ChatGPT | Bmad-Method |
 
-### 1. Overview & Vision
+### Overview & Vision
 
 Developing a general usage mobile app for different clinics like Pediatrics,Otolaryngology,Dental clinics. But start with medical beauty clinic. This mobile app has goals as followings:
 
@@ -29,6 +30,8 @@ Developing a general usage mobile app for different clinics like Pediatrics,Otol
   
 #### Bar code tool.
 - Customer needs to download this app and has his own bar code as ID.
+- Bar code could be used as inventory control interface.
+- Bar code could be used in workflow including customer ID, treatment ID, medician ID etc.
 - Other bar code usages for efficency.
 
 #### Treatment pool
@@ -58,7 +61,21 @@ Developing a general usage mobile app for different clinics like Pediatrics,Otol
 #### Navigation bar
 - home, My Reservation, Reservation, My Records, More
 
-
+#### Chat capability
+- Customer can express his/her own feeling of treatment.
+- Chat can be grouped by clinic department or be grouped under spcific doctor.
 
 
   
+
+#### to do  
+- This app maily sell to clinic by range of users and quarterly active users and range of quarterly average revenue of clinic. The ranges definition depends on what kind of clinic and the scale for clinic.  This app shall have minimun range of limit.
+- User will install this app by QR code scanner. The QR code may be print on business card or post on facebook or other media.
+- Please add the two items above in proper position of new PRD and add change log as following format. and new version will be 0.90.3 and date is 2025-12-20
+  
+### Change Log
+
+| Date       | Version | Description        | Author      |
+| ---------- | ------- | ------------------ | ----------- |
+| 2025-12-18 | 0.90.1  | Initial PRD        | Austin      |
+| 2025-12-19 | 0.90.2  | Rewrite by ChatGPT | Bmad-Method |
