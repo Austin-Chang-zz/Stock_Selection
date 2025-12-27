@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>庫存管理 - Clinext</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 pb-20">
+    <div class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+        <div class="flex items-center gap-3">
+            <a href="../staff/dashboard.html" class="text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <h1 class="text-lg font-medium">庫存管理</h1>
+        </div>
+        <button class="text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="px-4 py-4">
+        <div class="flex gap-2 overflow-x-auto pb-2 mb-4">
+            <button class="px-4 py-2 bg-green-600 text-white rounded-full text-sm font-medium whitespace-nowrap">全部</button>
+            <button class="px-4 py-2 bg-white text-gray-700 rounded-full text-sm whitespace-nowrap">注射類</button>
+            <button class="px-4 py-2 bg-white text-gray-700 rounded-full text-sm whitespace-nowrap">儀器耗材</button>
+            <button class="px-4 py-2 bg-white text-gray-700 rounded-full text-sm whitespace-nowrap">護理產品</button>
+            <button class="px-4 py-2 bg-white text-gray-700 rounded-full text-sm whitespace-nowrap">低庫存</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                    <span class="text-sm text-gray-500">總品項</span>
+                </div>
+                <p class="text-2xl font-bold text-gray-800">156</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <span class="text-sm text-gray-500">低庫存</span>
+                </div>
+                <p class="text-2xl font-bold text-orange-600">3</p>
+            </div>
+        </div>
+
+        <h2 class="text-lg font-bold text-gray-800 mb-3">注射類藥品</h2>
+        <div class="space-y-3 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">美國肉毒桿菌素</h3>
+                        <p class="text-sm text-gray-500">Botulinum Toxin Type A</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">充足</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold">25 瓶</span>
+                        <span class="text-gray-400 ml-2">(100U/瓶)</span>
+                    </div>
+                    <span class="text-sm text-gray-500">批號: BTX-2025-001</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">韓國肉毒桿菌素</h3>
+                        <p class="text-sm text-gray-500">Nabota 100U</p>
+                    </div>
+                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">低庫存</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold text-orange-600">5 瓶</span>
+                        <span class="text-gray-400 ml-2">(100U/瓶)</span>
+                    </div>
+                    <span class="text-sm text-gray-500">批號: NAB-2025-012</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">薇貝拉玻尿酸</h3>
+                        <p class="text-sm text-gray-500">Versa HA Filler 1cc</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">充足</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold">42 支</span>
+                        <span class="text-gray-400 ml-2">(1cc/支)</span>
+                    </div>
+                    <span class="text-sm text-gray-500">批號: VRS-2025-008</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">韓國玻尿酸</h3>
+                        <p class="text-sm text-gray-500">Korean HA Dermal Filler</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">充足</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold">36 支</span>
+                        <span class="text-gray-400 ml-2">(1cc/支)</span>
+                    </div>
+                    <span class="text-sm text-gray-500">批號: KHA-2025-015</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-lg font-bold text-gray-800 mb-3">儀器耗材</h2>
+        <div class="space-y-3 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">海芙音波探頭</h3>
+                        <p class="text-sm text-gray-500">HIFU Cartridge 1000發</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">充足</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold">12 個</span>
+                    </div>
+                    <span class="text-sm text-gray-500">3.0mm/4.5mm</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">鳳凰電波探頭</h3>
+                        <p class="text-sm text-gray-500">RF Thermage 900發</p>
+                    </div>
+                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">低庫存</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold text-orange-600">3 個</span>
+                    </div>
+                    <span class="text-sm text-gray-500">批號: THR-2025-003</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">皮秒蜂巢透鏡</h3>
+                        <p class="text-sm text-gray-500">Pico Laser Focus Lens</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">充足</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold">8 個</span>
+                    </div>
+                    <span class="text-sm text-gray-500">批號: PCL-2025-006</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-lg font-bold text-gray-800 mb-3">消耗品</h2>
+        <div class="space-y-3">
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">傳導凝膠</h3>
+                        <p class="text-sm text-gray-500">Ultrasound Gel 500ml</p>
+                    </div>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">充足</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold">48 瓶</span>
+                    </div>
+                    <span class="text-sm text-gray-500">500ml/瓶</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h3 class="font-medium text-gray-900">注射針頭組</h3>
+                        <p class="text-sm text-gray-500">Injection Needle Set</p>
+                    </div>
+                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">低庫存</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <span>庫存：</span>
+                        <span class="font-semibold text-orange-600">50 組</span>
+                    </div>
+                    <span class="text-sm text-gray-500">30G/27G 混裝</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 flex items-center justify-around">
+        <a href="../staff/dashboard.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            <span class="text-xs">首頁</span>
+        </a>
+        <a href="inventory.html" class="flex flex-col items-center gap-1 text-green-600">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <span class="text-xs font-medium">庫存</span>
+        </a>
+        <a href="../sales/new_order.html" class="flex flex-col items-center -mt-6">
+            <div class="bg-green-600 rounded-full p-4 shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+            </div>
+            <span class="text-xs mt-1 text-gray-700">新單</span>
+        </a>
+        <a href="../sales/customers.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span class="text-xs">客戶</span>
+        </a>
+        <a href="../sales/reports.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <span class="text-xs">報表</span>
+        </a>
+    </div>
+</body>
+
+</html>

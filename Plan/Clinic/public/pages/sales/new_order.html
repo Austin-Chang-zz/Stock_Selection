@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新療程單 - Clinext</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 pb-24">
+    <div class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+        <div class="flex items-center gap-3">
+            <a href="../staff/dashboard.html" class="text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </a>
+            <h1 class="text-lg font-medium">新療程單</h1>
+        </div>
+        <div class="w-6"></div>
+    </div>
+
+    <div class="px-4 py-4 space-y-3">
+        <div class="bg-white rounded-xl px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-1">
+                <span class="text-red-500">*</span>
+                <span class="text-gray-800">客戶</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-600" id="selectedCustomer">選擇客戶</span>
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl px-4 py-4 flex items-center justify-between">
+            <span class="text-gray-800">貨幣</span>
+            <span class="text-gray-800">新台幣 (TWD)</span>
+        </div>
+
+        <div class="bg-white rounded-xl px-4 py-4 flex items-center justify-between">
+            <span class="text-gray-800">日期</span>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-800" id="currentDate">2025-12-25</span>
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl px-4 py-4 flex items-center justify-between">
+            <span class="text-gray-800">美容師/護理師</span>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-800" id="staffName">張護理師</span>
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl px-4 py-4 flex items-center justify-between">
+            <span class="text-gray-800">醫師</span>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-600">選擇醫師</span>
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+            <button id="selectTreatmentBtn" class="flex-1 bg-white rounded-xl px-4 py-4 flex items-center justify-center gap-2 text-purple-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span class="font-medium">選擇療程</span>
+            </button>
+
+            <button class="flex-1 bg-white rounded-xl px-4 py-4 flex items-center justify-center gap-2 text-cyan-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+                <span class="font-medium">掃碼添加</span>
+            </button>
+        </div>
+
+        <div id="treatmentList" class="space-y-3 hidden">
+            <h3 class="text-lg font-bold text-gray-800 pt-4">已選療程</h3>
+        </div>
+
+        <div id="orderSummary" class="bg-white rounded-xl p-4 hidden">
+            <h3 class="text-lg font-bold text-gray-800 mb-3">訂單摘要</h3>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">小計</span>
+                    <span class="text-gray-800" id="subtotal">$0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">折扣</span>
+                    <span class="text-green-600" id="discount">-$0</span>
+                </div>
+                <div class="border-t border-gray-200 pt-2 mt-2">
+                    <div class="flex justify-between text-lg font-bold">
+                        <span class="text-gray-800">總計</span>
+                        <span class="text-green-600" id="total">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="treatmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl mx-4 max-w-md w-full max-h-[80vh] overflow-hidden">
+            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-bold">選擇療程</h3>
+                <button id="closeModalBtn" class="text-gray-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-[60vh] p-4 space-y-3">
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="美國肉毒瘦小臉" data-price="4999" data-unit="30U">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">美國肉毒瘦小臉</h4>
+                            <p class="text-sm text-gray-500">Botox 30U</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$4,999</span>
+                    </div>
+                </div>
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="韓國肉毒 100U + 容酷針" data-price="8888" data-unit="100U">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">韓國肉毒 100U + 容酷針</h4>
+                            <p class="text-sm text-gray-500">Nabota 100U + Contour</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$8,888</span>
+                    </div>
+                </div>
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="薇貝拉玻尿酸 1cc" data-price="12000" data-unit="1cc">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">薇貝拉玻尿酸 1cc</h4>
+                            <p class="text-sm text-gray-500">Versa HA Filler</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$12,000</span>
+                    </div>
+                </div>
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="海芙音波 1000條" data-price="38000" data-unit="1000發">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">海芙音波 1000條</h4>
+                            <p class="text-sm text-gray-500">HIFU Lifting</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$38,000</span>
+                    </div>
+                </div>
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="皮秒蜂巢雷射" data-price="5800" data-unit="單次">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">皮秒蜂巢雷射</h4>
+                            <p class="text-sm text-gray-500">Pico Laser</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$5,800</span>
+                    </div>
+                </div>
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="鳳凰電波 900 + 音波 300" data-price="68000" data-unit="1200發">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">鳳凰電波 900 + 音波 300</h4>
+                            <p class="text-sm text-gray-500">Thermage + HIFU Combo</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$68,000</span>
+                    </div>
+                </div>
+                <div class="treatment-item bg-gray-50 rounded-xl p-4 cursor-pointer hover:bg-purple-50" data-name="無瑕肌方案" data-price="10000" data-unit="四選一">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">無瑕肌方案</h4>
+                            <p class="text-sm text-gray-500">四選一促銷方案</p>
+                        </div>
+                        <span class="text-purple-600 font-bold">$10,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
+        <button id="submitOrderBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 rounded-full transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+            確認療程單
+        </button>
+    </div>
+
+    <script>
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (user) {
+            document.getElementById('staffName').textContent = user.name;
+        }
+        
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('currentDate').textContent = today;
+        
+        let selectedTreatments = [];
+        
+        document.getElementById('selectTreatmentBtn').addEventListener('click', function() {
+            document.getElementById('treatmentModal').classList.remove('hidden');
+            document.getElementById('treatmentModal').classList.add('flex');
+        });
+        
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
+            document.getElementById('treatmentModal').classList.add('hidden');
+            document.getElementById('treatmentModal').classList.remove('flex');
+        });
+        
+        document.querySelectorAll('.treatment-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const treatment = {
+                    name: this.dataset.name,
+                    price: parseInt(this.dataset.price),
+                    unit: this.dataset.unit
+                };
+                
+                selectedTreatments.push(treatment);
+                updateOrderDisplay();
+                
+                document.getElementById('treatmentModal').classList.add('hidden');
+                document.getElementById('treatmentModal').classList.remove('flex');
+            });
+        });
+        
+        function updateOrderDisplay() {
+            const listEl = document.getElementById('treatmentList');
+            const summaryEl = document.getElementById('orderSummary');
+            const submitBtn = document.getElementById('submitOrderBtn');
+            
+            if (selectedTreatments.length > 0) {
+                listEl.classList.remove('hidden');
+                summaryEl.classList.remove('hidden');
+                submitBtn.disabled = false;
+                
+                let html = '<h3 class="text-lg font-bold text-gray-800 pt-4">已選療程</h3>';
+                selectedTreatments.forEach((t, idx) => {
+                    html += `
+                        <div class="bg-white rounded-xl p-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-medium text-gray-900">${t.name}</h4>
+                                <p class="text-sm text-gray-500">${t.unit}</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-purple-600 font-bold">$${t.price.toLocaleString()}</span>
+                                <button onclick="removeTreatment(${idx})" class="text-red-500">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                listEl.innerHTML = html;
+                
+                const subtotal = selectedTreatments.reduce((sum, t) => sum + t.price, 0);
+                document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString();
+                document.getElementById('total').textContent = '$' + subtotal.toLocaleString();
+            } else {
+                listEl.classList.add('hidden');
+                summaryEl.classList.add('hidden');
+                submitBtn.disabled = true;
+            }
+        }
+        
+        window.removeTreatment = function(idx) {
+            selectedTreatments.splice(idx, 1);
+            updateOrderDisplay();
+        };
+        
+        document.getElementById('submitOrderBtn').addEventListener('click', function() {
+            alert('療程單已建立成功！');
+            window.location.href = '../staff/dashboard.html';
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>員工後台 - Clinext</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 flex items-center justify-between text-sm">
+        <div class="flex items-center gap-2">
+            <img src="/img/logo_light.png" alt="Clinext Logo" class="h-6 w-auto">
+            <span class="font-medium">Clinext 後台</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="currentUserName" class="text-sm"></span>
+            <button id="logoutBtn" class="text-white/80 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="px-4 py-6">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">歡迎回來！</h1>
+            <p class="text-gray-600">今日營運概況</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">今日預約</p>
+                        <p class="text-xl font-bold text-gray-800">12</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">今日營收</p>
+                        <p class="text-xl font-bold text-gray-800">$58,800</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">療程人次</p>
+                        <p class="text-xl font-bold text-gray-800">8</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">低庫存警示</p>
+                        <p class="text-xl font-bold text-orange-600">3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 shadow-sm mb-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">療程管理</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <a href="../inventory/treatments.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">療程目錄</span>
+                </a>
+                <a href="../inventory/drug_materials.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">藥材對照</span>
+                </a>
+                <a href="#" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">療程紀錄</span>
+                </a>
+                <a href="#" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">回診提醒</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 shadow-sm mb-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">庫存管理</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <a href="../inventory/inventory.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">庫存總覽</span>
+                </a>
+                <a href="../inventory/stock_check.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">盤點</span>
+                </a>
+                <a href="../inventory/procurement.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">進貨</span>
+                </a>
+                <a href="../inventory/suppliers.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">供應商</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 shadow-sm mb-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">銷售管理</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <a href="../sales/new_order.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">新療程單</span>
+                </a>
+                <a href="../sales/orders.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">療程訂單</span>
+                </a>
+                <a href="../sales/customers.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">客戶管理</span>
+                </a>
+                <a href="../sales/reports.html" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">營收報表</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="adminSection" class="bg-white rounded-xl p-4 shadow-sm mb-6 hidden">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">系統管理</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <a href="#" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">員工管理</span>
+                </a>
+                <a href="#" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">系統設定</span>
+                </a>
+                <a href="#" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">權限管理</span>
+                </a>
+                <a href="#" class="flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                    </div>
+                    <span class="text-xs text-gray-700 text-center">資料備份</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 flex items-center justify-around">
+        <a href="dashboard.html" class="flex flex-col items-center gap-1 text-green-600">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            <span class="text-xs font-medium">首頁</span>
+        </a>
+        <a href="../inventory/inventory.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <span class="text-xs">庫存</span>
+        </a>
+        <a href="../sales/new_order.html" class="flex flex-col items-center -mt-6">
+            <div class="bg-green-600 rounded-full p-4 shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+            </div>
+            <span class="text-xs mt-1 text-gray-700">新單</span>
+        </a>
+        <a href="../sales/customers.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span class="text-xs">客戶</span>
+        </a>
+        <a href="../sales/reports.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <span class="text-xs">報表</span>
+        </a>
+    </div>
+
+    <script>
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+        
+        if (!user || (user.role !== 'staff' && user.role !== 'admin')) {
+            window.location.href = '../login.html?mode=staff';
+        } else {
+            document.getElementById('currentUserName').textContent = user.name;
+            
+            if (user.role === 'admin') {
+                document.getElementById('adminSection').classList.remove('hidden');
+            }
+        }
+        
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = '../home.html';
+        });
+    </script>
+</body>
+
+</html>

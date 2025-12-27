@@ -1,0 +1,109 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>篩選</title>
+    <!-- Tailwind CDN (for quick demo) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white">
+    <!-- Phone frame (optional, can be removed) -->
+    <div class="min-h-screen max-w-sm mx-auto bg-white text-gray-900">
+
+        <!-- Header -->
+        <header class="flex items-center justify-between px-5 pt-5 pb-3">
+            <button class="text-3xl leading-none">&times;</button>
+            <h1 class="text-xl font-bold tracking-wide">篩選</h1>
+            <span class="w-6"></span> <!-- spacer to keep title centered -->
+        </header>
+
+        <main class="px-5 pt-4 pb-28 text-[17px] space-y-8">
+
+            <!-- Row 1 -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-900">已停用客戶</span>
+                <div class="flex items-center space-x-3">
+                    <span class="text-gray-400 text-sm">不顯示</span>
+                    <!-- Switch OFF -->
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer">
+                        <div class="w-12 h-7 bg-gray-200 rounded-full peer-focus:outline-none
+                     peer-focus:ring-2 peer-focus:ring-cyan-300
+                     after:content-[''] after:absolute after:top-[4px] after:left-[4px]
+                     after:bg-white after:border after:border-gray-300
+                     after:rounded-full after:h-5 after:w-5 after:transition-all
+                     peer-checked:bg-cyan-400 peer-checked:after:translate-x-5">
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="flex items-center justify-between">
+                <span class="text-gray-900">隱藏零欠款客戶</span>
+                <div class="flex items-center space-x-3">
+                    <span class="text-gray-400 text-sm">隱藏</span>
+                    <!-- Switch ON -->
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked>
+                        <div class="w-12 h-7 bg-cyan-400 rounded-full peer-focus:outline-none
+                     peer-focus:ring-2 peer-focus:ring-cyan-300
+                     after:content-[''] after:absolute after:top-[4px] after:left-[4px]
+                     after:bg-white after:border after:border-gray-300
+                     after:rounded-full after:h-5 after:w-5 after:transition-all
+                     peer-checked:bg-cyan-400 peer-checked:after:translate-x-5">
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Price level -->
+            <section class="space-y-4">
+                <h2 class="text-gray-900">價格等級</h2>
+                <div class="flex space-x-3">
+                    <!-- 全部 -->
+                    <button class="flex-1 py-3 rounded-md border border-gray-300
+                   text-lg text-gray-800 bg-white">
+                        全部
+                    </button>
+
+                    <!-- 零售價 (selected) -->
+                    <button class="flex-1 py-3 rounded-md border border-cyan-300
+                   bg-cyan-50 text-lg text-cyan-500">
+                        零售價
+                    </button>
+
+                    <!-- 批發價 -->
+                    <button class="flex-1 py-3 rounded-md border border-gray-300
+                   text-lg text-gray-800 bg-white">
+                        批發價
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom buttons -->
+        <footer class="fixed bottom-0 left-1/2 -translate-x-1/2
+             max-w-sm w-full bg-white border-t px-5 py-3">
+            <div class="flex space-x-3">
+                <button class="flex-1 py-3 rounded-md border border-gray-300
+                 bg-white text-lg text-gray-800">
+                    清空條件
+                </button>
+                <button class="flex-1 py-3 rounded-md border-0
+                 bg-gradient-to-r from-cyan-400 to-cyan-500
+                 text-lg text-white font-medium">
+                    確定
+                </button>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
+```
