@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Boss Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100">
+    <div class="p-6">
+        <h1 class="text-2xl font-bold mb-6">診所經營總覽</h1>
+
+        <!-- KPI -->
+        <div class="grid grid-cols-5 gap-4 mb-6">
+            <div class="bg-white p-4 rounded shadow">本月營收<br><b>$2,400,000</b></div>
+            <div class="bg-white p-4 rounded shadow">本月毛利<br><b>$1,280,000</b></div>
+            <div class="bg-white p-4 rounded shadow">毛利率<br><b>53%</b></div>
+            <div class="bg-white p-4 rounded shadow">現金餘額<br><b>$980,000</b></div>
+            <div class="bg-white p-4 rounded shadow">應收帳款<br><b>$320,000</b></div>
+        </div>
+
+        <!-- Treatment Profit -->
+        <div class="bg-white p-4 rounded shadow mb-6">
+            <h2 class="font-semibold mb-2">療程毛利排行</h2>
+            <table class="w-full text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th>療程</th>
+                        <th>次數</th>
+                        <th>平均毛利</th>
+                        <th>毛利率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-t">
+                        <td>音波拉提</td>
+                        <td>40</td>
+                        <td>$18,000</td>
+                        <td>65%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

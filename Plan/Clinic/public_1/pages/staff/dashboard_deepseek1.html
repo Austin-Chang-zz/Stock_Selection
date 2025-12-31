@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>員工後台 - Clinext 醫療美容系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+
+        .dashboard-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-trend-up {
+            color: #10b981;
+        }
+
+        .stats-trend-down {
+            color: #ef4444;
+        }
+
+        .quick-action {
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            transform: scale(1.05);
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-active {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 2px;
+        }
+
+        /* 移除預設的logo樣式 */
+        .logo-placeholder {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- 頂部導航 -->
+    <div
+        class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="logo-placeholder">C</div>
+            <div>
+                <h1 class="text-lg font-semibold">Clinext 智慧醫療後台</h1>
+                <p class="text-xs text-white/80">醫療美容診所管理系統</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- 通知鈴鐺 -->
+            <div class="relative">
+                <button id="notificationBtn"
+                    class="relative text-white hover:bg-white/10 p-2 rounded-full transition-colors">
+                    <i class="fas fa-bell"></i>
+                    <span id="notificationCount"
+                        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">3</span>
+                </button>
+            </div>
+
+            <!-- 使用者資訊 -->
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-sm"></i>
+                </div>
+                <div>
+                    <span id="currentUserName" class="text-sm font-medium">張護理師</span>
+                    <div class="text-xs text-white/70 flex items-center gap-1">
+                        <i class="fas fa-circle text-xs" style="color: #4ade80;"></i>
+                        <span id="userRole">員工</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 登出按鈕 -->
+            <button id="logoutBtn"
+                class="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 快速統計區 -->
+    <div class="px-4 py-4">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 id="greetingTitle" class="text-2xl font-bold text-gray-800">下午好！</h2>
+                <p class="text-gray-600">以下是今日的營運概況</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-500">更新於</span>
+                <span id="currentTime" class="font-medium">14:30</span>
+            </div>
+        </div>
+
+        <!-- 主要統計卡片 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <!-- 今日營收 -->
+            <div class="dashboard-card bg-white rounded-xl p-4 shadow-sm" style="border-left-color: #10b981;">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-money-bill-wave text-green-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">今日營收</p>
+                            <p class="text-xl font-bold text-gray-800">$58,800</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs stats-trend-up flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i> 12%
+                        </span>
+                        <span class="text-xs text-gray-500">昨日</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 今日預約 -->
+            <div class="dashboard-card bg-white rounded-xl p-4 shadow-sm" style="border-left-color: #3b82f6;">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">今日預約</p>
+                            <p class="text-xl font-bold text-gray-800" id="todayAppointments">12</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-gray-500">
+                            <span id="completedAppointments">8</span>/<span id="totalAppointments">12</span> 完成
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 療程人次 -->
+            <div class="dashboard-card bg-white rounded-xl p-4 shadow-sm" style="border-left-color: #8b5cf6;">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-syringe text-purple-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">療程人次</p>
+                            <p class="text-xl font-bold text-gray-800">8</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs stats-trend-up flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i> 3
+                        </span>
+                        <span class="text-xs text-gray-500">vs 昨日</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 低庫存警示 -->
+            <div class="dashboard-card bg-white rounded-xl p-4 shadow-sm" style="border-left-color: #f59e0b;">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-orange-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">低庫存警示</p>
+                            <p class="text-xl font-bold text-orange-600" id="lowStockCount">3</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button id="viewInventoryBtn" class="text-xs text-blue-600 hover:text-blue-800">
+                            檢視清單
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 圖表與快速操作區 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <!-- 營收圖表 -->
+            <div class="lg:col-span-2 bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">本週營收趨勢</h3>
+                    <select class="text-sm border border-gray-300 rounded-lg px-2 py-1">
+                        <option>本週</option>
+                        <option>本月</option>
+                        <option>本季</option>
+                    </select>
+                </div>
+                <div class="h-64">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 快速操作 -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-4">快速操作</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="new_order.html"
+                        class="quick-action bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-4 flex flex-col items-center justify-center gap-2">
+                        <i class="fas fa-plus-circle text-xl"></i>
+                        <span class="text-sm font-medium">新療程單</span>
+                    </a>
+                    <a href="customers.html"
+                        class="quick-action bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-4 flex flex-col items-center justify-center gap-2">
+                        <i class="fas fa-user-plus text-xl"></i>
+                        <span class="text-sm font-medium">新增客戶</span>
+                    </a>
+                    <a href="stock_check.html"
+                        class="quick-action bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl p-4 flex flex-col items-center justify-center gap-2">
+                        <i class="fas fa-clipboard-check text-xl"></i>
+                        <span class="text-sm font-medium">庫存盤點</span>
+                    </a>
+                    <a href="procurement.html"
+                        class="quick-action bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-4 flex flex-col items-center justify-center gap-2">
+                        <i class="fas fa-truck text-xl"></i>
+                        <span class="text-sm font-medium">進貨申請</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 今日預約與待辦事項 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <!-- 今日預約 -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">今日預約</h3>
+                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">查看全部</a>
+                </div>
+                <div id="appointmentsList" class="space-y-3 max-h-64 overflow-y-auto custom-scrollbar">
+                    <!-- 預約項目將會由 JavaScript 動態生成 -->
+                </div>
+            </div>
+
+            <!-- 待辦事項 -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">待辦事項</h3>
+                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">管理</a>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" class="rounded border-gray-300">
+                            <div>
+                                <p class="text-sm font-medium">回診追蹤電話</p>
+                                <p class="text-xs text-gray-500">陳美玲、林志明</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">今日</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" class="rounded border-gray-300">
+                            <div>
+                                <p class="text-sm font-medium">庫存補貨</p>
+                                <p class="text-xs text-gray-500">鳳凰電波探頭</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">今日</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" class="rounded border-gray-300">
+                            <div>
+                                <p class="text-sm font-medium">療程記錄整理</p>
+                                <p class="text-xs text-gray-500">12月療程檔案</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">本週</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 熱門療程與業績排名 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <!-- 熱門療程 -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-4">本月熱門療程</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-purple-100 rounded flex items-center justify-center">
+                                <i class="fas fa-syringe text-purple-600 text-sm"></i>
+                            </div>
+                            <span class="text-sm font-medium">海芙音波</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-bold">$152,000</span>
+                            <span class="text-xs text-gray-500 block">8 人次</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                                <i class="fas fa-syringe text-blue-600 text-sm"></i>
+                            </div>
+                            <span class="text-sm font-medium">美國肉毒</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-bold">$49,990</span>
+                            <span class="text-xs text-gray-500 block">10 人次</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-pink-100 rounded flex items-center justify-center">
+                                <i class="fas fa-syringe text-pink-600 text-sm"></i>
+                            </div>
+                            <span class="text-sm font-medium">玻尿酸填充</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-bold">$36,000</span>
+                            <span class="text-xs text-gray-500 block">6 人次</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 員工業績排名 -->
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">本月業績排名</h3>
+                    <span class="text-xs text-gray-500">更新: 今日</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                                <span class="text-yellow-800 font-bold text-xs">1</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">張醫師</p>
+                                <p class="text-xs text-gray-500">18 療程</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold">$248,800</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                <span class="text-gray-800 font-bold text-xs">2</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">王醫師</p>
+                                <p class="text-xs text-gray-500">12 療程</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold">$168,500</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center">
+                                <span class="text-orange-800 font-bold text-xs">3</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">李醫師</p>
+                                <p class="text-xs text-gray-500">9 療程</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-bold">$112,300</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部導航 -->
+    <div
+        class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-around shadow-lg z-20">
+        <a href="dashboard.html" class="flex flex-col items-center gap-1 text-green-600">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs font-medium">首頁</span>
+        </a>
+
+        <a href="inventory.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <i class="fas fa-boxes text-lg"></i>
+            <span class="text-xs">庫存</span>
+        </a>
+
+        <a href="treatment_order.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <i class="fas fa-clipboard-list text-lg"></i>
+            <span class="text-xs">訂單</span>
+        </a>
+
+        <a href="new_order.html" class="flex flex-col items-center -mt-8">
+            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-full p-5 shadow-xl">
+                <i class="fas fa-plus text-white text-xl"></i>
+            </div>
+            <span class="text-xs mt-1 text-gray-700 font-medium">新單</span>
+        </a>
+
+        <a href="customers.html" class="flex flex-col items-center gap-1 text-gray-500">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs">客戶</span>
+        </a>
+
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-500">
+            <i class="fas fa-calendar-alt text-lg"></i>
+            <span class="text-xs">行程</span>
+        </a>
+    </div>
+
+    <!-- 通知面板 -->
+    <div id="notificationPanel"
+        class="fixed top-16 right-4 w-80 bg-white rounded-xl shadow-xl border border-gray-200 hidden z-40">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h4 class="font-bold text-gray-800">通知</h4>
+                <button id="markAllReadBtn" class="text-sm text-blue-600 hover:text-blue-800">全部已讀</button>
+            </div>
+        </div>
+        <div id="notificationsList" class="max-h-80 overflow-y-auto custom-scrollbar">
+            <!-- 通知項目將會由 JavaScript 動態生成 -->
+        </div>
+    </div>
+
+    <script>
+        // 從 sessionStorage 獲取使用者資訊 (如果有的話)
+        let user;
+        try {
+            user = JSON.parse(sessionStorage.getItem('currentUser')) || { name: '張護理師', role: 'staff' };
+        } catch (e) {
+            user = { name: '張護理師', role: 'staff' };
+        }
+
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function () {
+            // 設定使用者資訊
+            document.getElementById('currentUserName').textContent = user.name;
+            document.getElementById('userRole').textContent = user.role === 'admin' ? '管理員' : '員工';
+
+            // 設定問候語
+            setGreeting();
+
+            // 設定時間
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 60000); // 每分鐘更新一次
+
+            // 載入儀表板數據
+            loadDashboardData();
+
+            // 初始化圖表
+            initializeCharts();
+
+            // 設定事件監聽器
+            setupEventListeners();
+
+            // 顯示通知計數
+            showNotificationCount();
+        });
+
+        // 設定問候語
+        function setGreeting() {
+            const hour = new Date().getHours();
+            let greeting = '您好！';
+
+            if (hour < 12) greeting = '早安！';
+            else if (hour < 18) greeting = '午安！';
+            else greeting = '晚安！';
+
+            document.getElementById('greetingTitle').textContent = greeting;
+        }
+
+        // 更新當前時間
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ':' +
+                now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        // 載入儀表板數據
+        function loadDashboardData() {
+            // 載入今日預約
+            loadTodayAppointments();
+
+            // 載入通知
+            loadNotifications();
+
+            // 模擬庫存數據
+            updateInventoryStats();
+        }
+
+        // 載入今日預約
+        function loadTodayAppointments() {
+            // 模擬數據
+            const appointments = [
+                {
+                    id: 'APT001',
+                    patientName: '陳美玲',
+                    time: '10:30',
+                    treatment: '海芙音波',
+                    doctor: '張醫師',
+                    status: 'completed'
+                },
+                {
+                    id: 'APT002',
+                    patientName: '林志明',
+                    time: '14:00',
+                    treatment: '皮秒雷射',
+                    doctor: '王醫師',
+                    status: 'confirmed'
+                },
+                {
+                    id: 'APT003',
+                    patientName: '王曉婷',
+                    time: '15:30',
+                    treatment: '玻尿酸填充',
+                    doctor: '李醫師',
+                    status: 'pending'
+                },
+                {
+                    id: 'APT004',
+                    patientName: '劉建國',
+                    time: '16:45',
+                    treatment: '肉毒瘦臉',
+                    doctor: '張醫師',
+                    status: 'confirmed'
+                }
+            ];
+
+            const container = document.getElementById('appointmentsList');
+            if (container) {
+                container.innerHTML = appointments.map(apt => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">${apt.patientName}</p>
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <span>${apt.time}</span>
+                                    <span>•</span>
+                                    <span>${apt.treatment}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="status-badge ${getAppointmentStatusClass(apt.status)}">
+                                ${getAppointmentStatusText(apt.status)}
+                            </span>
+                            <p class="text-xs text-gray-500 mt-1">${apt.doctor}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                // 更新計數
+                const completed = appointments.filter(a => a.status === 'completed').length;
+                document.getElementById('completedAppointments').textContent = completed;
+                document.getElementById('totalAppointments').textContent = appointments.length;
+            }
+        }
+
+        // 更新庫存統計
+        function updateInventoryStats() {
+            // 模擬庫存數據
+            const lowStockCount = 3;
+            document.getElementById('lowStockCount').textContent = lowStockCount;
+        }
+
+        // 顯示通知計數
+        function showNotificationCount() {
+            // 模擬3個通知
+            document.getElementById('notificationCount').textContent = '3';
+        }
+
+        // 載入通知
+        function loadNotifications() {
+            const notifications = [
+                {
+                    id: 'NOT001',
+                    type: 'stock',
+                    title: '庫存不足警告',
+                    message: '鳳凰電波探頭庫存低於安全水位',
+                    time: '10分鐘前',
+                    read: false
+                },
+                {
+                    id: 'NOT002',
+                    type: 'appointment',
+                    title: '新預約通知',
+                    message: '陳美玲預約了海芙音波療程',
+                    time: '30分鐘前',
+                    read: false
+                },
+                {
+                    id: 'NOT003',
+                    type: 'payment',
+                    title: '付款完成',
+                    message: '林志明的療程付款已確認',
+                    time: '1小時前',
+                    read: true
+                },
+                {
+                    id: 'NOT004',
+                    type: 'system',
+                    title: '系統更新',
+                    message: '系統將於今晚12點進行維護',
+                    time: '2小時前',
+                    read: false
+                }
+            ];
+
+            const container = document.getElementById('notificationsList');
+            if (container) {
+                container.innerHTML = notifications.map(notif => `
+                    <div class="p-3 border-b border-gray-100 ${notif.read ? '' : 'bg-blue-50'}">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 ${getNotificationIconClass(notif.type)} rounded-full flex items-center justify-center mt-1">
+                                <i class="fas ${getNotificationIcon(notif.type)} text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <h5 class="text-sm font-medium">${notif.title}</h5>
+                                    ${!notif.read ? '<span class="w-2 h-2 bg-blue-500 rounded-full mt-2"></span>' : ''}
+                                </div>
+                                <p class="text-xs text-gray-600 mt-1">${notif.message}</p>
+                                <p class="text-xs text-gray-400 mt-2">${notif.time}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 初始化圖表
+        function initializeCharts() {
+            const ctx = document.getElementById('revenueChart');
+            if (ctx) {
+                new Chart(ctx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['週一', '週二', '週三', '週四', '週五', '週六', '週日'],
+                        datasets: [{
+                            label: '營收',
+                            data: [45000, 52000, 48000, 58800, 62000, 55000, 38000],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#10b981',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return '營收: $' + context.parsed.y.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function (value) {
+                                        return '$' + value.toLocaleString();
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 輔助函數
+        function getAppointmentStatusClass(status) {
+            switch (status) {
+                case 'completed': return 'status-completed';
+                case 'confirmed': return 'status-active';
+                case 'pending': return 'status-pending';
+                default: return '';
+            }
+        }
+
+        function getAppointmentStatusText(status) {
+            switch (status) {
+                case 'completed': return '已完成';
+                case 'confirmed': return '已確認';
+                case 'pending': return '待確認';
+                default: return status;
+            }
+        }
+
+        function getNotificationIcon(type) {
+            switch (type) {
+                case 'stock': return 'fa-box';
+                case 'appointment': return 'fa-calendar-check';
+                case 'payment': return 'fa-credit-card';
+                case 'system': return 'fa-cog';
+                default: return 'fa-bell';
+            }
+        }
+
+        function getNotificationIconClass(type) {
+            switch (type) {
+                case 'stock': return 'bg-orange-100 text-orange-600';
+                case 'appointment': return 'bg-blue-100 text-blue-600';
+                case 'payment': return 'bg-green-100 text-green-600';
+                case 'system': return 'bg-gray-100 text-gray-600';
+                default: return 'bg-gray-100 text-gray-600';
+            }
+        }
+
+        // 設定事件監聽器
+        function setupEventListeners() {
+            // 登出按鈕
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                if (confirm('確定要登出嗎？')) {
+                    sessionStorage.removeItem('currentUser');
+                    window.location.href = '../index.html';
+                }
+            });
+
+            // 通知按鈕
+            document.getElementById('notificationBtn').addEventListener('click', function (e) {
+                e.stopPropagation();
+                const panel = document.getElementById('notificationPanel');
+                panel.classList.toggle('hidden');
+            });
+
+            // 標記所有為已讀
+            document.getElementById('markAllReadBtn').addEventListener('click', function () {
+                document.getElementById('notificationCount').classList.add('hidden');
+                document.querySelectorAll('#notificationsList .bg-blue-50').forEach(el => {
+                    el.classList.remove('bg-blue-50');
+                });
+                // 這裡可以加入 API 呼叫標記所有通知為已讀
+            });
+
+            // 檢視庫存清單
+            document.getElementById('viewInventoryBtn').addEventListener('click', function () {
+                window.location.href = 'inventory.html';
+            });
+
+            // 點擊外部關閉通知面板
+            document.addEventListener('click', function (event) {
+                const panel = document.getElementById('notificationPanel');
+                const btn = document.getElementById('notificationBtn');
+
+                if (!panel.contains(event.target) && !btn.contains(event.target)) {
+                    panel.classList.add('hidden');
+                }
+            });
+
+            // 待辦事項勾選
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        this.parentElement.parentElement.classList.add('opacity-50');
+                        this.parentElement.parentElement.querySelector('.text-sm').classList.add('line-through');
+                    } else {
+                        this.parentElement.parentElement.classList.remove('opacity-50');
+                        this.parentElement.parentElement.querySelector('.text-sm').classList.remove('line-through');
+                    }
+                });
+            });
+
+            // 底部導航點擊效果
+            document.querySelectorAll('.fixed.bottom-0 a').forEach(link => {
+                link.addEventListener('click', function () {
+                    document.querySelectorAll('.fixed.bottom-0 a').forEach(a => {
+                        a.classList.remove('text-green-600');
+                        a.classList.add('text-gray-500');
+                        a.querySelector('span').classList.remove('font-medium');
+                    });
+
+                    if (this.href.includes('dashboard.html')) {
+                        this.classList.add('text-green-600');
+                        this.classList.remove('text-gray-500');
+                        this.querySelector('span').classList.add('font-medium');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

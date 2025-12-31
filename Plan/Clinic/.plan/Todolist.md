@@ -104,4 +104,48 @@ Every subsystem may start with each subsystem’s MVP and then expend from MVP t
 ---
 ## 2025-12-26 Debug replit protype
 ### Issues
-- 
+- use DeepSeek create or upgrade the inventory and sales folder fils.
+
+# 2025-12-27 
+## to do
+### dashboard page upgrade
+- some database items are missing & some are not related.
+- dashboard navigation items
+### database
+- check necessary database and CRUD
+  - patient, nurse, employee, supplier,treatment items, drug/materials, devices.
+### login/page/access right
+- define Patient/staff/admin pages and access right
+### Financial summary
+- daily/weekly/monthly
+- summary items
+
+---
+# 2025-12-28
+## prompt for upgrade the staff dashboard and navigation item
+- upload dev plan, treatment order, new order,inventory and dashboard
+- please refer attached file and dashboard.html, please upgrade the dashboard items and whether the navigation items are suitable, if have more good idea, you may change the navigation items.
+## migration plan from vs code to replit
+- copy public_1/pages files to replit one by one.
+    staff only copy dashboard_deepseek2.html
+- create a page2 folder in user and copy latest files to replit corresponding page2 folder.
+- make replit agent 3 prompt for running new features.  ----------------
+# 2025-12-30
+## prompt for replit agent 3
+- please refer all files under user/page2, some files are new created, some are updated. and follow clinext_dev_plan.md contents to build this app.
+### test
+
+please make code to do following links:
+- 療程目錄 on /staff/dashboard shall link to sales/treatment_catalog.html
+- 療程訂單 on /staff/dashboard shall link to sales/treatment_orderhtml
+- 新療程單 on /staff/dashboard shall link to sales/new_order.html
+- 客戶管理 on /staff/dashboard shall link to sales/customers.html
+- 營收報表 on /staff/dashboard shall link to sales/reports.html
+
+- 藥材對照 on /staff/dashboard shall link to inventory/drug_materials.html
+- 庫存總覽 on /staff/dashboard shall link to /invcontrol/inventory.html
+- 進貨 on /staff/dashboard shall link to inventory/incoming_materials.html
+---
+
+# 2025-12-31
+## prompt for replit agent 3

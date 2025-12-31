@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinext 後台儀表板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 pb-20">
+
+    <!-- Top Bar -->
+    <div class="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <img src="/img/logo_light.png" class="h-6" />
+            <span class="font-semibold">Clinext 後台</span>
+        </div>
+        <div class="text-sm">歡迎回來，<span class="font-medium">Staff</span></div>
+    </div>
+
+    <!-- Header -->
+    <div class="px-4 py-6">
+        <h1 class="text-2xl font-bold text-gray-800">今日營運總覽</h1>
+        <p class="text-gray-500">即時狀態與待辦事項</p>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="px-4 grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-xl shadow">
+            <p class="text-sm text-gray-500">今日待處理預約</p>
+            <p class="text-2xl font-bold text-blue-600">5</p>
+            <p class="text-xs text-gray-400">未報到 / 即將開始</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow">
+            <p class="text-sm text-gray-500">今日營收</p>
+            <p class="text-2xl font-bold text-green-600">$58,800</p>
+            <p class="text-xs text-gray-400">本月目標達成 63%</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow">
+            <p class="text-sm text-gray-500">療程執行狀態</p>
+            <p class="text-2xl font-bold text-purple-600">8 / 2</p>
+            <p class="text-xs text-gray-400">完成 / 進行中</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow border-l-4 border-orange-400">
+            <p class="text-sm text-gray-500">風險警示</p>
+            <p class="text-2xl font-bold text-orange-500">3</p>
+            <p class="text-xs text-gray-400">低庫存 / 近效期</p>
+        </div>
+    </div>
+
+    <!-- Today Schedule & Follow-up -->
+    <div class="px-4 grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="text-lg font-bold text-gray-800 mb-3">📅 今日預約</h2>
+            <ul class="space-y-2 text-sm">
+                <li>10:00 王小姐｜皮秒雷射</li>
+                <li>11:30 李先生｜肉毒瘦臉</li>
+                <li>14:00 陳小姐｜音波拉提</li>
+            </ul>
+        </div>
+        <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="text-lg font-bold text-gray-800 mb-3">🔁 即將回診（7日內）</h2>
+            <ul class="space-y-2 text-sm">
+                <li>王小姐｜皮秒雷射｜D+28</li>
+                <li>李先生｜肉毒｜D+90</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Action Center -->
+    <div class="px-4 mb-6">
+        <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="text-lg font-bold text-gray-800 mb-3">🔔 待處理事項</h2>
+            <ul class="space-y-2 text-sm">
+                <li class="flex justify-between">
+                    <span>尚未填寫療程紀錄</span><span class="text-red-500">3</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>未完成收款訂單</span><span class="text-orange-500">2</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>低於安全庫存項目</span><span class="text-yellow-600">1</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    
+
+    <!-- Quick Navigation -->
+    <div class="px-4 mb-10">
+        <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">快速功能</h2>
+            <div class="grid grid-cols-4 gap-4 text-center text-xs">
+                <a href="../patients/list.html" class="hover:text-green-600">👤 病人</a>
+                <a href="../treatments/catalog.html" class="hover:text-green-600">💉 療程</a>
+                <a href="../sales/orders.html" class="hover:text-green-600">💰 訂單</a>
+                <a href="../inventory/inventory.html" class="hover:text-green-600">📦 庫存</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t px-4 py-2 flex justify-around text-xs">
+        <a href="#" class="text-green-600">首頁</a>
+        <a href="../patients/list.html">病人</a>
+        <a href="../sales/new_order.html" class="font-bold text-green-700">＋</a>
+        <a href="../inventory/inventory.html">庫存</a>
+        <a href="../reports/index.html">報表</a>
+    </div>
+
+</body>
+
+</html>

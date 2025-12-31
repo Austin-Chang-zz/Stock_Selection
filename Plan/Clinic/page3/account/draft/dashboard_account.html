@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accountant Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="p-6">
+        <h1 class="text-2xl font-bold mb-6">會計師 Dashboard</h1>
+
+        <!-- Status -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-4 rounded shadow">借貸平衡<br><b class="text-green-600">✔</b></div>
+            <div class="bg-white p-4 rounded shadow">未過帳傳票<br><b>2</b></div>
+            <div class="bg-white p-4 rounded shadow">已鎖帳<br><b>2025-01</b></div>
+            <div class="bg-white p-4 rounded shadow">本期傳票<br><b>126</b></div>
+        </div>
+
+        <!-- Voucher List -->
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="font-semibold mb-2">傳票清冊</h2>
+            <table class="w-full text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th>傳票號</th>
+                        <th>日期</th>
+                        <th>借方</th>
+                        <th>貸方</th>
+                        <th>Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-t">
+                        <td>JV-20250112-001</td>
+                        <td>2025-01-12</td>
+                        <td>$50,000</td>
+                        <td>$50,000</td>
+                        <td>Treatment #883</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
