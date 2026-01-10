@@ -148,4 +148,78 @@ please make code to do following links:
 ---
 
 # 2025-12-31
+## todo
+- staff/dashboard add accounting management
+- correct print scope of voucher.html
+
+## prompt for staff/dashboard add accounting management
+- offer url
+- https://a1trial.digiwin.com/#/accounting/report
+- please refer attached url and screen necessary items to upgrade dashboard.html for accounting aspect.
+- create an accounting dashboard_accounting.html
+- paste voucher.html and new_voucher.html.
+
+# 2026/1/1 
+## todo
+- add voucher number in voucher related page or item ----open
+
+
+
+## add camera feature in new voucher file
+- please refer attached voucher_attachment.html to add mobile camera feature to attach new_voucher.html.
+
 ## prompt for replit agent 3
+### action
+- put account 3 files to user page3
+### prompt
+- please refer three files in user/page3/accounting, add these files in suitable place
+- please also add accounting management item in staff/dashboare file. and can link three files in user/page3/accounting
+
+
+# 2026/1/2 1/3 patient booking
+## to do
+
+## prompt for LLMs to get reservation dashboard
+- [x] I am planning to make a reservation dashboard page.  please list out the key features of reservation dashboard and offer me prompt for creating reservation.html
+- I am developing a medical beauty clinic web app. please use mermaid chart to plot the flow chart and time sequence chart.  Start with :    
+  - patient login in the app and booking the treatment process. 
+  - booking information includes :
+    - weekly/month calendar view. 
+    - time slot 
+      - if occupied or simultanously booking by other patient, immediate reject notification.
+  - clinic staff confirm and send a confirm notification
+
+## prompt for treatment_order.html and new_order.html
+-  refer https://fullcalendar.io/demos to create a app wide calendar view.
+   -  appointment calendar featurs for patient booking.
+     - Monthly / Weekly / Daily toggle
+     - Color‑coded appointments (e.g., Botox = blue, Laser = pink, Facial = green)
+     - Drag‑&‑drop to reschedule appointments.
+   - new_order.html and treatment_order.html will link with this calendar view.
+   - add calendar view in staff/dashboard.html
+   - add calendar view in accounting/dashboard_accounting as well
+## prompt for trae
+the path is plan/Clinic/page4/public4_replit/pages
+-  refer `https://fullcalendar.io/demos` to create a app wide calendar view.
+   -  appointment calendar featurs for patient booking.
+     - Monthly / Weekly / Daily toggle
+     - Color‑coded appointments (e.g., Botox = blue, Laser = pink, Facial = green)
+     - Drag‑&‑drop to reschedule appointments.
+   - sales/new_order.html and sales/treatment_order.html will link with this calendar view.
+   - add calendar view in staff/dashboard.html
+   - add calendar view in accounting/dashboard_accounting as well 
+
+## 2026/1/4 use Trae for calendar related files
+## todo
+- make reseravtion.html calender link working.
+- copy 5 files to replit
+
+# 2026/1/5 prompt for building up database
+## please refer user/development/erd.md to create database schema and API specification.
+## please add mock data in staff/dashboard related database for running the dashboard testing.
+
+# 2026/1/6
+## todo
+- think over how to cowork replit with trae.
+- 
+- 

@@ -59,69 +59,6 @@
         .pulse-gentle {
             animation: pulse-gentle 2s infinite;
         }
-
-        /* 附件圖片樣式 */
-        .attachment-image {
-            max-height: 200px;
-            object-fit: cover;
-        }
-
-        /* 相機預覽樣式 */
-        #cameraPreview {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #cameraPreview video {
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-        }
-
-        .camera-controls {
-            position: absolute;
-            bottom: 40px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .camera-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .capture-btn {
-            background: white;
-            color: black;
-        }
-
-        .close-camera-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        /* 裁切區域樣式 */
-        .crop-area {
-            position: absolute;
-            border: 2px dashed #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
-        }
     </style>
 </head>
 
@@ -174,7 +111,7 @@
                     <div class="flex justify-between mt-2 text-sm">
                         <div class="text-primary font-bold">1. 基本資訊</div>
                         <div class="text-primary font-bold">2. 傳票明細</div>
-                        <div class="text-gray-400">3. 附件管理</div>
+                        <div class="text-gray-400">3. 關聯項目</div>
                         <div class="text-gray-400">4. 確認儲存</div>
                     </div>
                 </div>
@@ -327,80 +264,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 附件管理區塊 -->
-                        <div class="bg-white rounded-xl shadow-sm border p-5 mb-6">
-                            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                                <i class="fas fa-paperclip text-primary mr-2"></i> 憑證附件
-                            </h2>
-
-                            <div class="mb-4">
-                                <p class="text-gray-600 text-sm mb-3">
-                                    請上傳與此傳票相關的憑證（發票、收據、合約等），支援手機拍照上傳。
-                                </p>
-
-                                <!-- 附件上傳按鈕 -->
-                                <div class="grid grid-cols-2 gap-3 mb-4">
-                                    <!-- 標準方式：使用原生相機App (de facto standard) -->
-                                    <div class="text-center">
-                                        <input type="file" id="cameraInput" accept="image/*" capture="environment"
-                                            class="hidden" onchange="handleCameraCapture(event)">
-                                        <button type="button" onclick="document.getElementById('cameraInput').click()"
-                                            class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-lg flex flex-col items-center justify-center">
-                                            <i class="fas fa-camera text-xl mb-2"></i>
-                                            <span>拍照上傳</span>
-                                            <span class="text-xs mt-1 opacity-90">(使用手機相機)</span>
-                                        </button>
-                                        <p class="text-xs text-gray-500 mt-1">使用原生相機App，高畫質</p>
-                                    </div>
-
-                                    <!-- 從相簿選擇 -->
-                                    <div class="text-center">
-                                        <input type="file" id="fileInput" accept="image/*" class="hidden"
-                                            onchange="handleFileSelect(event)" multiple>
-                                        <button type="button" onclick="document.getElementById('fileInput').click()"
-                                            class="w-full bg-secondary hover:bg-green-600 text-white py-3 rounded-lg flex flex-col items-center justify-center">
-                                            <i class="fas fa-images text-xl mb-2"></i>
-                                            <span>選擇檔案</span>
-                                            <span class="text-xs mt-1 opacity-90">(從相簿選擇)</span>
-                                        </button>
-                                        <p class="text-xs text-gray-500 mt-1">支援多選、現有照片</p>
-                                    </div>
-                                </div>
-
-                                <!-- WebRTC相機預覽方式 (備用方案) -->
-                                <div class="text-center mb-3">
-                                    <button type="button" onclick="startWebRTCCamera()"
-                                        class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 py-2 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-video mr-2"></i>
-                                        <span>即時相機預覽</span>
-                                    </button>
-                                    <p class="text-xs text-gray-500 mt-1">直接在瀏覽器內拍照 (限支援WebRTC裝置)</p>
-                                </div>
-                            </div>
-
-                            <!-- 附件清單 -->
-                            <div id="attachmentsContainer" class="space-y-3">
-                                <div class="text-center py-4 text-gray-500" id="noAttachmentsMessage">
-                                    <i class="fas fa-receipt text-3xl mb-2 opacity-50"></i>
-                                    <p>尚未添加任何憑證附件</p>
-                                    <p class="text-sm mt-1">請點擊上方按鈕拍照或選擇檔案</p>
-                                </div>
-                                <!-- 附件項目將動態添加至此 -->
-                            </div>
-
-                            <!-- 附件統計 -->
-                            <div class="mt-4 pt-3 border-t">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-600">附件總數:</span>
-                                    <span class="font-medium" id="attachmentCount">0 個檔案</span>
-                                </div>
-                                <div class="flex justify-between text-sm mt-1">
-                                    <span class="text-gray-600">總檔案大小:</span>
-                                    <span class="font-medium" id="totalFileSize">0 MB</span>
                                 </div>
                             </div>
                         </div>
@@ -698,40 +561,10 @@
         </div>
     </div>
 
-    <!-- WebRTC相機預覽模態窗 -->
-    <div id="cameraPreview" class="fixed inset-0 bg-black z-50 hidden">
-        <div class="relative w-full h-full flex flex-col items-center justify-center">
-            <video id="cameraStream" autoplay playsinline class="w-full max-w-2xl"></video>
-
-            <!-- 裁切區域指示器 -->
-            <div id="cropArea" class="crop-area hidden"
-                style="width: 300px; height: 200px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-
-            <div class="camera-controls">
-                <button class="camera-btn close-camera-btn" onclick="closeWebRTCCamera()" title="關閉相機">
-                    <i class="fas fa-times"></i>
-                </button>
-                <button class="camera-btn capture-btn" onclick="captureFromWebRTC()" title="拍照">
-                    <i class="fas fa-camera"></i>
-                </button>
-                <button class="camera-btn close-camera-btn" onclick="toggleCropArea()" title="切換裁切模式">
-                    <i class="fas fa-crop"></i>
-                </button>
-            </div>
-
-            <div class="mt-4 text-white text-sm">
-                <p>請對準憑證，確保四角清晰可見</p>
-            </div>
-        </div>
-    </div>
-
     <script>
         // 初始化變數
         let detailCounter = 0;
         let voucherDetails = [];
-        let attachments = [];
-        let mediaStream = null;
-        let isCropping = false;
 
         // 初始化頁面
         document.addEventListener('DOMContentLoaded', function () {
@@ -764,387 +597,6 @@
             // 自動儲存檢查
             startAutoSave();
         });
-
-        // ========== 附件管理功能 ==========
-
-        // 處理相機拍攝（使用 de facto standard: input capture="environment"）
-        function handleCameraCapture(event) {
-            const files = event.target.files;
-            if (files.length > 0) {
-                Array.from(files).forEach(file => {
-                    processAndAddAttachment(file, '相機拍攝');
-                });
-
-                // 重置input以便再次使用
-                event.target.value = '';
-            }
-        }
-
-        // 處理檔案選擇
-        function handleFileSelect(event) {
-            const files = event.target.files;
-            if (files.length > 0) {
-                Array.from(files).forEach(file => {
-                    processAndAddAttachment(file, '檔案上傳');
-                });
-
-                // 重置input以便再次使用
-                event.target.value = '';
-            }
-        }
-
-        // 處理並添加附件
-        function processAndAddAttachment(file, source) {
-            // 檢查檔案類型
-            if (!file.type.startsWith('image/')) {
-                showToast('只能上傳圖片檔案', 'warning');
-                return;
-            }
-
-            // 檢查檔案大小（限制5MB）
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('檔案大小不能超過5MB', 'warning');
-                return;
-            }
-
-            // 建立預覽
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const attachment = {
-                    id: Date.now() + Math.random(),
-                    name: file.name,
-                    size: file.size,
-                    type: file.type,
-                    source: source,
-                    dataUrl: e.target.result,
-                    timestamp: new Date().toLocaleString('zh-TW'),
-                    file: file
-                };
-
-                attachments.push(attachment);
-                updateAttachmentsDisplay();
-                showToast(`已添加附件: ${file.name}`, 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // 更新附件顯示
-        function updateAttachmentsDisplay() {
-            const container = document.getElementById('attachmentsContainer');
-            const noAttachmentsMsg = document.getElementById('noAttachmentsMessage');
-
-            if (attachments.length === 0) {
-                noAttachmentsMsg.classList.remove('hidden');
-                container.innerHTML = '';
-                container.appendChild(noAttachmentsMsg);
-            } else {
-                noAttachmentsMsg.classList.add('hidden');
-
-                let html = '';
-                attachments.forEach((attachment, index) => {
-                    const sizeMB = (attachment.size / (1024 * 1024)).toFixed(2);
-
-                    html += `
-                        <div class="bg-gray-50 border rounded-lg p-3" id="attachment-${attachment.id}">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <div class="font-medium truncate max-w-xs">${attachment.name}</div>
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        <span>${attachment.timestamp}</span>
-                                        <span class="mx-2">•</span>
-                                        <span>${sizeMB} MB</span>
-                                        <span class="mx-2">•</span>
-                                        <span>${attachment.source}</span>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button type="button" onclick="previewAttachment(${index})" 
-                                            class="text-info hover:text-blue-700" title="預覽">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" onclick="removeAttachment('${attachment.id}')" 
-                                            class="text-danger hover:text-red-700" title="刪除">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-2">
-                                <img src="${attachment.dataUrl}" alt="${attachment.name}" 
-                                     class="w-full h-32 object-contain bg-white border rounded">
-                            </div>
-                            
-                            <div class="mt-2 flex justify-between items-center">
-                                <div class="text-xs text-gray-500">
-                                    <i class="fas fa-image mr-1"></i> 憑證圖片
-                                </div>
-                                <div class="text-xs">
-                                    <button type="button" onclick="enhanceImage(${index})" 
-                                            class="text-primary hover:text-primary-dark">
-                                        <i class="fas fa-magic mr-1"></i> 影像增強
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML = html;
-            }
-
-            // 更新統計資訊
-            updateAttachmentStats();
-        }
-
-        // 更新附件統計
-        function updateAttachmentStats() {
-            const totalSize = attachments.reduce((sum, att) => sum + att.size, 0);
-            const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
-
-            document.getElementById('attachmentCount').textContent = `${attachments.length} 個檔案`;
-            document.getElementById('totalFileSize').textContent = `${sizeMB} MB`;
-        }
-
-        // 移除附件
-        function removeAttachment(id) {
-            attachments = attachments.filter(att => att.id !== id);
-            updateAttachmentsDisplay();
-            showToast('附件已移除', 'warning');
-        }
-
-        // 預覽附件
-        function previewAttachment(index) {
-            const attachment = attachments[index];
-
-            const previewHTML = `
-                <div class="bg-white p-4 rounded-lg">
-                    <div class="text-center mb-4">
-                        <h3 class="text-lg font-bold">${attachment.name}</h3>
-                        <div class="text-sm text-gray-500 mt-1">
-                            ${attachment.timestamp} • ${(attachment.size / (1024 * 1024)).toFixed(2)} MB • ${attachment.source}
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-center mb-4">
-                        <img src="${attachment.dataUrl}" alt="${attachment.name}" 
-                             class="max-w-full max-h-[60vh] object-contain border rounded">
-                    </div>
-                    
-                    <div class="text-center">
-                        <button type="button" onclick="downloadAttachment(${index})"
-                                class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg mr-2">
-                            <i class="fas fa-download mr-2"></i> 下載
-                        </button>
-                        <button type="button" onclick="printAttachment(${index})"
-                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg">
-                            <i class="fas fa-print mr-2"></i> 列印
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            // 使用現有預覽模態窗
-            document.getElementById('previewContent').innerHTML = previewHTML;
-            document.getElementById('previewModal').classList.remove('hidden');
-        }
-
-        // 下載附件
-        function downloadAttachment(index) {
-            const attachment = attachments[index];
-            const link = document.createElement('a');
-            link.href = attachment.dataUrl;
-            link.download = attachment.name;
-            link.click();
-        }
-
-        // 列印附件
-        function printAttachment(index) {
-            const attachment = attachments[index];
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>列印憑證 - ${attachment.name}</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; }
-                            .header { text-align: center; margin-bottom: 20px; }
-                            .image-container { text-align: center; margin: 20px 0; }
-                            .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #666; }
-                            img { max-width: 100%; max-height: 70vh; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <h2>醫美診所傳票憑證</h2>
-                            <p>${attachment.name}</p>
-                            <p>${attachment.timestamp}</p>
-                        </div>
-                        <div class="image-container">
-                            <img src="${attachment.dataUrl}" alt="${attachment.name}">
-                        </div>
-                        <div class="footer">
-                            <p>列印時間: ${new Date().toLocaleString('zh-TW')}</p>
-                            <p>系統自動產生 - 醫美診所傳票管理系統</p>
-                        </div>
-                    </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
-        }
-
-        // 影像增強（模擬功能）
-        function enhanceImage(index) {
-            const attachment = attachments[index];
-
-            // 模擬影像處理
-            showToast('影像增強處理中...', 'info');
-
-            setTimeout(() => {
-                // 這裡可以添加實際的影像處理邏輯
-                // 例如使用Canvas進行對比度調整、銳化等
-                const img = new Image();
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-
-                    // 簡單的影像增強：調整對比度和亮度
-                    ctx.drawImage(img, 0, 0);
-
-                    // 應用影像濾鏡
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const data = imageData.data;
-
-                    // 簡單的對比度增強
-                    for (let i = 0; i < data.length; i += 4) {
-                        // 調整對比度
-                        const factor = 1.2;
-                        data[i] = (data[i] - 128) * factor + 128; // R
-                        data[i + 1] = (data[i + 1] - 128) * factor + 128; // G
-                        data[i + 2] = (data[i + 2] - 128) * factor + 128; // B
-                    }
-
-                    ctx.putImageData(imageData, 0, 0);
-
-                    // 更新附件
-                    attachment.dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-                    updateAttachmentsDisplay();
-                    showToast('影像增強完成', 'success');
-                };
-                img.src = attachment.dataUrl;
-            }, 1000);
-        }
-
-        // ========== WebRTC相機功能 ==========
-
-        // 啟動WebRTC相機
-        async function startWebRTCCamera() {
-            try {
-                const constraints = {
-                    video: {
-                        facingMode: "environment", // 使用後置鏡頭
-                        width: { ideal: 1920 },
-                        height: { ideal: 1080 }
-                    },
-                    audio: false
-                };
-
-                mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-
-                const cameraPreview = document.getElementById('cameraPreview');
-                const videoElement = document.getElementById('cameraStream');
-
-                videoElement.srcObject = mediaStream;
-                cameraPreview.classList.remove('hidden');
-
-                // 確保影片元素正確顯示
-                videoElement.onloadedmetadata = function () {
-                    videoElement.play();
-                };
-
-            } catch (error) {
-                console.error('無法訪問相機:', error);
-                showToast('無法訪問相機，請檢查權限設定', 'danger');
-
-                // 回退到標準方法
-                document.getElementById('cameraInput').click();
-            }
-        }
-
-        // 關閉WebRTC相機
-        function closeWebRTCCamera() {
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(track => track.stop());
-                mediaStream = null;
-            }
-
-            document.getElementById('cameraPreview').classList.add('hidden');
-            document.getElementById('cropArea').classList.add('hidden');
-            isCropping = false;
-        }
-
-        // 從WebRTC拍照
-        function captureFromWebRTC() {
-            const video = document.getElementById('cameraStream');
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            // 設定Canvas尺寸
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            // 裁切邏輯
-            if (isCropping) {
-                const cropArea = document.getElementById('cropArea');
-                const rect = cropArea.getBoundingClientRect();
-                const videoRect = video.getBoundingClientRect();
-
-                // 計算裁切區域
-                const scaleX = video.videoWidth / videoRect.width;
-                const scaleY = video.videoHeight / videoRect.height;
-
-                const cropX = (rect.left - videoRect.left) * scaleX;
-                const cropY = (rect.top - videoRect.top) * scaleY;
-                const cropWidth = rect.width * scaleX;
-                const cropHeight = rect.height * scaleY;
-
-                // 裁切並繪製
-                ctx.drawImage(video, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-
-                // 更新Canvas尺寸為裁切後的尺寸
-                canvas.width = cropWidth;
-                canvas.height = cropHeight;
-            } else {
-                // 完整拍攝
-                ctx.drawImage(video, 0, 0);
-            }
-
-            // 轉換為Blob
-            canvas.toBlob(function (blob) {
-                const file = new File([blob], `憑證_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.jpg`, {
-                    type: 'image/jpeg'
-                });
-
-                processAndAddAttachment(file, '即時拍攝');
-                closeWebRTCCamera();
-            }, 'image/jpeg', 0.9);
-        }
-
-        // 切換裁切模式
-        function toggleCropArea() {
-            const cropArea = document.getElementById('cropArea');
-            isCropping = !isCropping;
-
-            if (isCropping) {
-                cropArea.classList.remove('hidden');
-            } else {
-                cropArea.classList.add('hidden');
-            }
-        }
-
-        // ========== 原始功能保持不變 ==========
 
         // 更新傳票編號
         function updateVoucherNumber() {
@@ -1491,7 +943,7 @@
             updateLastSaveTime();
         }
 
-        // 預覽傳票（擴充版，包含附件資訊）
+        // 預覽傳票
         function previewVoucher() {
             if (voucherDetails.length === 0) {
                 alert('請至少添加一筆傳票明細');
@@ -1555,7 +1007,7 @@
                     </div>
                     
                     <h3 class="font-bold text-gray-700 mb-3">傳票明細</h3>
-                    <div class="overflow-x-auto mb-6">
+                    <div class="overflow-x-auto">
                         <table class="w-full border">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -1597,54 +1049,9 @@
                         </table>
                     </div>
                     
-                    <!-- 附件預覽區 -->
-                    <h3 class="font-bold text-gray-700 mb-3">憑證附件 (${attachments.length} 個)</h3>
-            `;
-
-            if (attachments.length > 0) {
-                previewHTML += `
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                `;
-
-                attachments.slice(0, 4).forEach((att, index) => {
-                    previewHTML += `
-                        <div class="border rounded-lg p-3">
-                            <div class="font-medium truncate mb-2">${att.name}</div>
-                            <img src="${att.dataUrl}" alt="${att.name}" 
-                                 class="w-full h-32 object-cover rounded mb-2">
-                            <div class="text-xs text-gray-500">
-                                ${att.timestamp} • ${(att.size / (1024 * 1024)).toFixed(2)} MB
-                            </div>
-                        </div>
-                    `;
-                });
-
-                if (attachments.length > 4) {
-                    previewHTML += `
-                        <div class="border rounded-lg p-3 flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-images text-3xl text-gray-400 mb-2"></i>
-                                <div class="font-medium">還有 ${attachments.length - 4} 個附件</div>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                previewHTML += `</div>`;
-            } else {
-                previewHTML += `
-                    <div class="bg-gray-50 border rounded-lg p-6 text-center mb-6">
-                        <i class="fas fa-receipt text-4xl text-gray-400 mb-3"></i>
-                        <p class="text-gray-500">無附件憑證</p>
-                    </div>
-                `;
-            }
-
-            previewHTML += `
                     <div class="mt-6 pt-4 border-t text-sm text-gray-500">
                         <p>預覽時間: ${new Date().toLocaleString('zh-TW')}</p>
                         <p>建立人員: 張美華 (會計)</p>
-                        <p>附件總數: ${attachments.length} 個檔案</p>
                     </div>
                 </div>
             `;
@@ -1676,7 +1083,7 @@
             window.print();
         }
 
-        // 提交傳票（擴充版，包含附件）
+        // 提交傳票
         function submitVoucher() {
             // 驗證傳票
             if (!validateVoucher()) {
@@ -1685,27 +1092,7 @@
 
             // 確認提交
             if (confirm('確定要建立此傳票嗎？建立後將無法修改。')) {
-                // 在這裡實現提交傳票的邏輯，包括附件
-                // 可以將attachments陣列與voucherDetails一起提交到伺服器
-
-                const voucherData = {
-                    voucherNumber: document.getElementById('voucherNumber').textContent,
-                    voucherType: document.querySelector('input[name="voucherType"]:checked').value,
-                    voucherDate: document.getElementById('voucherDate').value,
-                    description: document.getElementById('description').value,
-                    details: voucherDetails,
-                    attachments: attachments.map(att => ({
-                        name: att.name,
-                        size: att.size,
-                        type: att.type,
-                        source: att.source
-                    })),
-                    createdBy: '張美華',
-                    timestamp: new Date().toISOString()
-                };
-
-                console.log('傳票資料準備提交:', voucherData);
-
+                // 在這裡實現提交傳票的邏輯
                 showToast('傳票已成功建立', 'success');
 
                 // 延遲後跳轉到傳票列表
@@ -1715,7 +1102,7 @@
             }
         }
 
-        // 驗證傳票（擴充版）
+        // 驗證傳票
         function validateVoucher() {
             // 檢查是否有明細
             if (voucherDetails.length === 0) {
@@ -1758,8 +1145,8 @@
             // 建立toast元素
             const toast = document.createElement('div');
             toast.className = `toast-message fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white ${type === 'success' ? 'bg-green-500' :
-                type === 'warning' ? 'bg-yellow-500' :
-                    type === 'danger' ? 'bg-red-500' : 'bg-blue-500'
+                    type === 'warning' ? 'bg-yellow-500' :
+                        type === 'danger' ? 'bg-red-500' : 'bg-blue-500'
                 }`;
             toast.textContent = message;
 
@@ -1786,7 +1173,7 @@
         function startAutoSave() {
             // 每2分鐘自動儲存一次
             setInterval(() => {
-                if (voucherDetails.length > 0 || attachments.length > 0) {
+                if (voucherDetails.length > 0) {
                     saveAsDraft();
                 }
             }, 120000); // 2分鐘 = 120000毫秒

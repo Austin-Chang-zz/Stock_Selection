@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>醫美診所分潤計算系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-50">
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- 標題 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">💼 醫美診所分潤計算系統</h1>
+                <p class="text-gray-600">靈活配置分潤比例、計算業績獎金、實時查看分配結果</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 左側：基本設置 -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 基本設置</h2>
+
+                        <!-- 月度獲利 -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                月度總獲利
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-500 font-semibold">NT$</span>
+                                <input type="number" id="totalProfit" value="500000"
+                                    class="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                    min="0">
+                            </div>
+                        </div>
+
+                        <!-- 預留金額 -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                預留營運金 (%)
+                            </label>
+                            <input type="number" id="operatingReserve" value="10"
+                                class="w-full px-4 py-2 border-2 border-green-300 rounded-lg focus:outline-none focus:border-green-500"
+                                min="0" max="100">
+                            <p class="text-xs text-gray-500 mt-1">
+                                預留金額: <span class="font-semibold" id="reserveAmount">NT$ 0</span>
+                            </p>
+                        </div>
+
+                        <!-- 可分配金額 -->
+                        <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 mb-6">
+                            <p class="text-xs text-gray-600 mb-1">可分配金額</p>
+                            <p class="text-3xl font-bold text-blue-600" id="availableAmount">NT$ 0</p>
+                        </div>
+
+                        <!-- 分潤配置說明 -->
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">🔧 分潤配置說明</h3>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>✓ 所有員工分潤比例加總應為 100%</li>
+                                <li>✓ 業績獎金獨立計算，不影響分潤</li>
+                                <li>✓ 實時更新計算結果</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中間：成員配置 -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">👥 成員分潤配置</h2>
+
+                        <div id="memberContainer" class="space-y-4">
+                            <!-- 動態生成成員 -->
+                        </div>
+
+                        <!-- 新增成員 -->
+                        <button onclick="addMember()"
+                            class="w-full mt-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 rounded-lg transition-all">
+                            + 新增成員
+                        </button>
+
+                        <!-- 分潤合計檢查 -->
+                        <div class="mt-6 p-4 rounded-lg" id="totalPercentageBox">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">分潤合計</span>
+                                <span class="text-2xl font-bold" id="totalPercentage">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 業績獎金設置 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">🏆 業績獎金設置</h2>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    業績獎金總額 (%)
+                                </label>
+                                <input type="number" id="bonusPercentage" value="5"
+                                    class="w-full px-4 py-2 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-500"
+                                    min="0" max="100">
+                                <p class="text-xs text-gray-500 mt-1">
+                                    獎金池: <span class="font-semibold" id="bonusPool">NT$ 0</span>
+                                </p>
+                            </div>
+
+                            <div id="bonusContainer" class="space-y-3">
+                                <!-- 動態生成業績獎金 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：結果展示 -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">💰 分配結果</h2>
+
+                        <div id="resultContainer" class="space-y-3">
+                            <!-- 動態生成結果 -->
+                        </div>
+
+                        <!-- 統計摘要 -->
+                        <div
+                            class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-4 mt-6 border border-gray-200">
+                            <h3 class="font-semibold text-gray-900 mb-3">📈 統計摘要</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">總人數</span>
+                                    <span class="font-semibold" id="totalMembers">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">分配總額</span>
+                                    <span class="font-semibold text-green-600" id="totalDistributed">NT$ 0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">預留金額</span>
+                                    <span class="font-semibold text-blue-600" id="summaryReserve">NT$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 導出功能 -->
+                        <div class="mt-6 space-y-2">
+                            <button onclick="exportAsCSV()"
+                                class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg transition-all">
+                                📥 匯出為 CSV
+                            </button>
+                            <button onclick="printPage()"
+                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg transition-all">
+                                🖨️ 列印
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 圖表 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">📊 分潤分布圖</h3>
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 默認成員數據
+        const defaultMembers = [
+            { id: 1, name: '老闆', role: '老闆', percentage: 30 },
+            { id: 2, name: '醫生A', role: '醫生', percentage: 35 },
+            { id: 3, name: '護士B', role: '護士', percentage: 15 },
+            { id: 4, name: '業務C', role: '業務', percentage: 15 },
+            { id: 5, name: '行政D', role: '行政', percentage: 5 }
+        ];
+
+        let members = JSON.parse(JSON.stringify(defaultMembers));
+        let nextMemberId = 6;
+        let chart = null;
+
+        const roleColors = {
+            '老闆': '#3b82f6',
+            '醫生': '#ef4444',
+            '護士': '#f59e0b',
+            '業務': '#10b981',
+            '行政': '#8b5cf6'
+        };
+
+        const roleEmojis = {
+            '老闆': '👔',
+            '醫生': '👨‍⚕️',
+            '護士': '👩‍⚕️',
+            '業務': '💼',
+            '行政': '📋'
+        };
+
+        // 格式化貨幣
+        function formatCurrency(num) {
+            return 'NT$ ' + Math.round(num).toLocaleString();
+        }
+
+        // 初始化
+        function init() {
+            renderMembers();
+            renderBonusConfig();
+            calculate();
+        }
+
+        // 渲染成員列表
+        function renderMembers() {
+            const container = document.getElementById('memberContainer');
+            container.innerHTML = members.map(member => `
+                <div class="bg-gray-50 p-4 rounded-lg border-l-4" style="border-color: ${roleColors[member.role]}">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">${roleEmojis[member.role]}</span>
+                            <input type="text" value="${member.name}" 
+                                onchange="updateMember(${member.id}, 'name', this.value)"
+                                class="px-3 py-1 border rounded font-semibold text-gray-900 focus:outline-none focus:border-blue-500">
+                        </div>
+                        <button onclick="removeMember(${member.id})" class="text-red-500 hover:text-red-700 font-bold text-xl transition-all">
+                            ✕
+                        </button>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label class="text-xs text-gray-600 block mb-1">職位</label>
+                        <select onchange="updateMember(${member.id}, 'role', this.value)"
+                            class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:border-blue-500">
+                            ${Object.keys(roleEmojis).map(role =>
+                `<option value="${role}" ${member.role === role ? 'selected' : ''}>${role}</option>`
+            ).join('')}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-gray-600 block mb-1">分潤比例</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" min="0" max="100" value="${member.percentage}"
+                                onchange="updateMember(${member.id}, 'percentage', this.value)"
+                                class="flex-1 h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+                            <input type="number" value="${member.percentage}" 
+                                onchange="updateMember(${member.id}, 'percentage', this.value)"
+                                class="w-16 px-2 py-1 border rounded text-center font-semibold focus:outline-none focus:border-blue-500"
+                                min="0" max="100">
+                            <span class="text-sm font-semibold text-gray-600">%</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染業績獎金配置
+        function renderBonusConfig() {
+            const bonusPercentage = parseFloat(document.getElementById('bonusPercentage').value);
+            const totalProfit = parseFloat(document.getElementById('totalProfit').value);
+            const operatingReserve = parseFloat(document.getElementById('operatingReserve').value);
+            const availableAmount = totalProfit * (1 - operatingReserve / 100);
+            const bonusPool = availableAmount * (bonusPercentage / 100);
+
+            const container = document.getElementById('bonusContainer');
+
+            // 只為有設置的成員顯示業績獎金
+            const hasBonusMembers = members.filter(m => m.bonusPercentage);
+
+            if (hasBonusMembers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-gray-500 text-sm">
+                        尚未為任何成員設置業績獎金
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = hasBonusMembers.map(member => `
+                <div class="bg-purple-50 p-3 rounded border border-purple-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-semibold text-gray-900">${member.name}</span>
+                        <button onclick="updateMember(${member.id}, 'bonusPercentage', 0)" 
+                            class="text-red-500 hover:text-red-700 text-sm">移除</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="range" min="0" max="100" value="${member.bonusPercentage || 0}"
+                            onchange="updateMember(${member.id}, 'bonusPercentage', this.value)"
+                            class="flex-1 h-2 bg-purple-300 rounded-lg appearance-none cursor-pointer">
+                        <input type="number" value="${member.bonusPercentage || 0}" 
+                            onchange="updateMember(${member.id}, 'bonusPercentage', this.value)"
+                            class="w-12 px-2 py-1 border rounded text-center text-sm font-semibold focus:outline-none focus:border-purple-500"
+                            min="0" max="100">
+                        <span class="text-xs font-semibold text-gray-600">%</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // 添加設置業績獎金的按鈕
+            const unsetBonusMembers = members.filter(m => !m.bonusPercentage);
+            if (unsetBonusMembers.length > 0) {
+                container.innerHTML += `
+                    <div class="mt-3 pt-3 border-t">
+                        <p class="text-xs text-gray-600 mb-2">新增業績獎金成員:</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            ${unsetBonusMembers.map(member => `
+                                <button onclick="updateMember(${member.id}, 'bonusPercentage', 10)"
+                                    class="text-xs bg-purple-200 hover:bg-purple-300 text-purple-900 py-1 px-2 rounded transition-all">
+                                    + ${member.name}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 更新成員
+        function updateMember(id, field, value) {
+            const member = members.find(m => m.id === id);
+            if (member) {
+                if (field === 'percentage' || field === 'bonusPercentage') {
+                    member[field] = Math.max(0, Math.min(100, parseFloat(value) || 0));
+                } else {
+                    member[field] = value;
+                }
+                renderMembers();
+                renderBonusConfig();
+                calculate();
+            }
+        }
+
+        // 新增成員
+        function addMember() {
+            members.push({
+                id: nextMemberId++,
+                name: `新成員${nextMemberId - 5}`,
+                role: '行政',
+                percentage: 0,
+                bonusPercentage: 0
+            });
+            renderMembers();
+            calculate();
+        }
+
+        // 刪除成員
+        function removeMember(id) {
+            if (members.length === 1) {
+                alert('至少需要保留一個成員');
+                return;
+            }
+            members = members.filter(m => m.id !== id);
+            renderMembers();
+            renderBonusConfig();
+            calculate();
+        }
+
+        // 計算及更新
+        function calculate() {
+            const totalProfit = parseFloat(document.getElementById('totalProfit').value) || 0;
+            const operatingReserve = parseFloat(document.getElementById('operatingReserve').value) || 0;
+            const bonusPercentage = parseFloat(document.getElementById('bonusPercentage').value) || 0;
+
+            // 計算可分配金額
+            const reserveAmount = totalProfit * (operatingReserve / 100);
+            const availableAmount = totalProfit - reserveAmount;
+            const bonusPool = availableAmount * (bonusPercentage / 100);
+            const distributionAmount = availableAmount - bonusPool;
+
+            // 更新UI
+            document.getElementById('reserveAmount').textContent = formatCurrency(reserveAmount);
+            document.getElementById('availableAmount').textContent = formatCurrency(availableAmount);
+            document.getElementById('bonusPool').textContent = formatCurrency(bonusPool);
+
+            // 計算成員分配
+            const totalPercentage = members.reduce((sum, m) => sum + m.percentage, 0);
+            document.getElementById('totalPercentage').textContent = `${totalPercentage}%`;
+
+            // 分潤合計顏色提示
+            const totalPercentageBox = document.getElementById('totalPercentageBox');
+            if (totalPercentage === 100) {
+                totalPercentageBox.className = 'mt-6 p-4 rounded-lg bg-green-50 border-2 border-green-300';
+            } else if (totalPercentage > 100) {
+                totalPercentageBox.className = 'mt-6 p-4 rounded-lg bg-red-50 border-2 border-red-300';
+            } else {
+                totalPercentageBox.className = 'mt-6 p-4 rounded-lg bg-yellow-50 border-2 border-yellow-300';
+            }
+
+            // 計算結果
+            const results = members.map(member => {
+                const profitShare = (distributionAmount * member.percentage / 100) || 0;
+                const totalBonus = members.filter(m => m.bonusPercentage).reduce((sum, m) => sum + m.bonusPercentage, 0);
+                const bonusAmount = totalBonus > 0 ? (bonusPool * (member.bonusPercentage || 0) / totalBonus) : 0;
+                const total = profitShare + bonusAmount;
+
+                return {
+                    id: member.id,
+                    name: member.name,
+                    role: member.role,
+                    percentage: member.percentage,
+                    profitShare,
+                    bonusPercentage: member.bonusPercentage || 0,
+                    bonusAmount,
+                    total
+                };
+            });
+
+            // 渲染結果
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = results.map(result => `
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border-l-4" style="border-color: ${roleColors[result.role]}">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">${roleEmojis[result.role]}</span>
+                            <span class="font-semibold text-gray-900">${result.name}</span>
+                        </div>
+                        <span class="text-xs bg-gray-300 text-gray-800 px-2 py-1 rounded">${result.role}</span>
+                    </div>
+                    
+                    <div class="space-y-1 text-sm">
+                        ${result.percentage > 0 ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">分潤 (${result.percentage}%)</span>
+                                <span class="font-semibold text-blue-600">${formatCurrency(result.profitShare)}</span>
+                            </div>
+                        ` : ''}
+                        ${result.bonusAmount > 0 ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">獎金 (${result.bonusPercentage}%)</span>
+                                <span class="font-semibold text-purple-600">${formatCurrency(result.bonusAmount)}</span>
+                            </div>
+                        ` : ''}
+                        <div class="flex justify-between pt-2 border-t border-gray-300">
+                            <span class="font-bold text-gray-900">合計</span>
+                            <span class="font-bold text-lg text-green-600">${formatCurrency(result.total)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 統計摘要
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('totalDistributed').textContent = formatCurrency(
+                results.reduce((sum, r) => sum + r.total, 0)
+            );
+            document.getElementById('summaryReserve').textContent = formatCurrency(reserveAmount);
+
+            // 更新圖表
+            updateChart(results);
+        }
+
+        // 更新圖表
+        function updateChart(results) {
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: results.map(r => r.name),
+                    datasets: [{
+                        data: results.map(r => r.total),
+                        backgroundColor: results.map(r => roleColors[r.role]),
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12 },
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `NT$ ${Math.round(value).toLocaleString()} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 匯出CSV
+        function exportAsCSV() {
+            const totalProfit = parseFloat(document.getElementById('totalProfit').value);
+            const operatingReserve = parseFloat(document.getElementById('operatingReserve').value);
+            const bonusPercentage = parseFloat(document.getElementById('bonusPercentage').value);
+
+            const reserveAmount = totalProfit * (operatingReserve / 100);
+            const availableAmount = totalProfit - reserveAmount;
+            const bonusPool = availableAmount * (bonusPercentage / 100);
+            const distributionAmount = availableAmount - bonusPool;
+
+            const results = members.map(member => {
+                const profitShare = (distributionAmount * member.percentage / 100) || 0;
+                const totalBonus = members.filter(m => m.bonusPercentage).reduce((sum, m) => sum + m.bonusPercentage, 0);
+                const bonusAmount = totalBonus > 0 ? (bonusPool * (member.bonusPercentage || 0) / totalBonus) : 0;
+                const total = profitShare + bonusAmount;
+                return [member.name, member.role, member.percentage, profitShare, member.bonusPercentage, bonusAmount, total];
+            });
+
+            const headers = ['姓名', '職位', '分潤比例(%)', '分潤金額', '業績獎金比例(%)', '業績獎金', '合計'];
+            const csv = [
+                ['醫美診所分潤計算系統'],
+                [`月度總獲利,NT$ ${totalProfit.toLocaleString()}`],
+                [`預留營運金,NT$ ${reserveAmount.toLocaleString()}`],
+                [`可分配金額,NT$ ${availableAmount.toLocaleString()}`],
+                [],
+                headers,
+                ...results.map(r => [
+                    r[0], r[1], r[2], r[3].toLocaleString('zh-TW', { style: 'currency', currency: 'TWD' }),
+                    r[4], r[5].toLocaleString('zh-TW', { style: 'currency', currency: 'TWD' }),
+                    r[6].toLocaleString('zh-TW', { style: 'currency', currency: 'TWD' })
+                ])
+            ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `醫美診所分潤計算_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // 列印
+        function printPage() {
+            window.print();
+        }
+
+        // 監聽輸入變化
+        document.getElementById('totalProfit').addEventListener('change', calculate);
+        document.getElementById('operatingReserve').addEventListener('change', calculate);
+        document.getElementById('bonusPercentage').addEventListener('change', () => {
+            renderBonusConfig();
+            calculate();
+        });
+
+        // 初始化
+        init();
+    </script>
+
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</body>
+
+</html>

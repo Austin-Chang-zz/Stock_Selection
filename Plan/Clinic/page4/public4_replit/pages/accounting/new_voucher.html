@@ -132,7 +132,7 @@
             <div class="px-6 py-4">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-4">
-                        <a href="voucher_main.html" class="text-gray-500 hover:text-primary">
+                        <a href="voucher.html" class="text-gray-500 hover:text-primary">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                         <div class="bg-primary p-2 rounded-lg">
@@ -868,12 +868,12 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-2">
                                 <img src="${attachment.dataUrl}" alt="${attachment.name}" 
                                      class="w-full h-32 object-contain bg-white border rounded">
                             </div>
-                            
+
                             <div class="mt-2 flex justify-between items-center">
                                 <div class="text-xs text-gray-500">
                                     <i class="fas fa-image mr-1"></i> 憑證圖片
@@ -924,12 +924,12 @@
                             ${attachment.timestamp} • ${(attachment.size / (1024 * 1024)).toFixed(2)} MB • ${attachment.source}
                         </div>
                     </div>
-                    
+
                     <div class="flex justify-center mb-4">
                         <img src="${attachment.dataUrl}" alt="${attachment.name}" 
                              class="max-w-full max-h-[60vh] object-contain border rounded">
                     </div>
-                    
+
                     <div class="text-center">
                         <button type="button" onclick="downloadAttachment(${index})"
                                 class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg mr-2">
@@ -1513,7 +1513,7 @@
                         <h2 class="text-2xl font-bold">醫美診所傳票預覽</h2>
                         <div class="text-lg text-gray-600 mt-2">${document.getElementById('voucherNumber').textContent}</div>
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-6 mb-6">
                         <div>
                             <h3 class="font-bold text-gray-700 mb-3">基本資訊</h3>
@@ -1532,7 +1532,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <h3 class="font-bold text-gray-700 mb-3">金額總計</h3>
                             <div class="space-y-2">
@@ -1553,7 +1553,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <h3 class="font-bold text-gray-700 mb-3">傳票明細</h3>
                     <div class="overflow-x-auto mb-6">
                         <table class="w-full border">
@@ -1596,7 +1596,7 @@
                             </tfoot>
                         </table>
                     </div>
-                    
+
                     <!-- 附件預覽區 -->
                     <h3 class="font-bold text-gray-700 mb-3">憑證附件 (${attachments.length} 個)</h3>
             `;
