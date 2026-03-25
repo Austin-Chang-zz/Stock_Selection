@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>醫美診所分潤計算系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- 頂部導航 -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="dashboard.html" class="text-gray-500 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-arrow-left mr-1"></i> 返回儀表板
+                </a>
+                <div class="h-6 w-px bg-gray-300"></div>
+                <h1 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-calculator text-blue-600"></i>
+                    醫美診所分潤計算系統
+                </h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="resetData()" class="text-sm text-gray-500 hover:text-red-600 transition-colors">
+                    <i class="fas fa-undo mr-1"></i> 重置數據
+                </button>
+                <div class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                    A
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- 標題區域 (僅打印時顯示) -->
+            <div class="hidden print:block mb-8 text-center">
+                <h1 class="text-3xl font-bold text-gray-900">醫美診所分潤計算報表</h1>
+                <p class="text-gray-600 mt-2">打印日期: <span id="printDate"></span></p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 左側：基本設置 -->
+                <div class="lg:col-span-1 no-print">
+                    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-blue-500"></i> 基本設置
+                        </h2>
+
+                        <!-- 月度獲利 -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                月度總獲利
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-500 font-semibold">NT$</span>
+                                <input type="number" id="totalProfit" value="500000"
+                                    class="w-full pl-12 pr-4 py-2 border-2 border-blue-100 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
+                                    min="0">
+                            </div>
+                        </div>
+
+                        <!-- 預留金額 -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex justify-between">
+                                <span>預留營運金 (%)</span>
+                                <span class="text-blue-600" id="operatingReserveDisplay">10%</span>
+                            </label>
+                            <input type="range" id="operatingReserve" value="10"
+                                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-2" min="0"
+                                max="50">
+                            <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded">
+                                預留金額: <span class="font-bold text-gray-700" id="reserveAmount">NT$ 0</span>
+                            </p>
+                        </div>
+
+                        <!-- 可分配金額 -->
+                        <div
+                            class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 mb-6 text-white shadow-md">
+                            <p class="text-xs text-blue-100 mb-1">可分配金額</p>
+                            <p class="text-3xl font-bold" id="availableAmount">NT$ 0</p>
+                        </div>
+
+                        <!-- 治療券總收入 -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                治療券總收入
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-500 font-semibold">NT$</span>
+                                <input type="number" id="voucherTotalRevenue" value="200000"
+                                    class="w-full pl-12 pr-4 py-2 border-2 border-green-100 rounded-lg focus:outline-none focus:border-green-500 transition-colors"
+                                    min="0">
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">月度治療券銷售總收入</p>
+                        </div>
+
+                        <!-- 分潤配置說明 -->
+                        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r">
+                            <h3 class="font-semibold text-amber-800 mb-2 text-sm">
+                                <i class="fas fa-lightbulb mr-1"></i> 分潤配置說明
+                            </h3>
+                            <ul class="text-xs text-amber-700 space-y-1 ml-4 list-disc">
+                                <li>所有員工分潤比例加總應為 100%</li>
+                                <li>業績獎金包含治療券銷售獎金和利潤分潤獎金</li>
+                                <li>治療券獎金根據銷售類型和數量獨立計算</li>
+                                <li>數據會自動保存到瀏覽器</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中間：成員配置 -->
+                <div class="lg:col-span-1 no-print">
+                    <!-- 成員分潤配置 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-users text-purple-500"></i> 成員利潤分潤配置
+                            </h2>
+                            <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full"
+                                id="memberCountBadge">0 人</span>
+                        </div>
+
+                        <div id="memberContainer" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            <!-- 動態生成成員 -->
+                        </div>
+
+                        <!-- 新增成員 -->
+                        <button onclick="addMember()"
+                            class="w-full mt-6 bg-dashed border-2 border-blue-300 text-blue-500 hover:bg-blue-50 hover:border-blue-400 font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-plus-circle"></i> 新增成員
+                        </button>
+
+                        <!-- 分潤合計檢查 -->
+                        <div class="mt-6 p-4 rounded-lg transition-colors duration-300" id="totalPercentageBox">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">利潤分潤合計 (目標: 100%)</span>
+                                <span class="text-2xl font-bold" id="totalPercentage">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" id="progressBar"
+                                    style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 治療券銷售配置 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-ticket-alt text-green-500"></i> 治療券銷售配置
+                            </h2>
+                            <button onclick="addVoucherType()"
+                                class="text-xs bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1 rounded-full transition-colors flex items-center gap-1">
+                                <i class="fas fa-plus"></i> 新增券種
+                            </button>
+                        </div>
+
+                        <div id="voucherContainer" class="space-y-4 mb-6">
+                            <!-- 動態生成治療券類型 -->
+                        </div>
+
+                        <!-- 治療券獎金比例 -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex justify-between">
+                                <span>治療券獎金總比例 (%)</span>
+                                <span class="text-green-600" id="voucherBonusPercentageDisplay">15%</span>
+                            </label>
+                            <input type="range" id="voucherBonusPercentage" value="15"
+                                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-2" min="0"
+                                max="50">
+                            <p class="text-xs text-gray-500 bg-green-50 p-2 rounded">
+                                治療券獎金池: <span class="font-bold text-green-700" id="voucherBonusPool">NT$ 0</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 治療券銷售記錄 -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            <i class="fas fa-clipboard-list text-yellow-500"></i> 治療券銷售記錄
+                        </h2>
+
+                        <div id="salesContainer" class="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <!-- 動態生成銷售記錄 -->
+                        </div>
+
+                        <button onclick="addSalesRecord()"
+                            class="w-full mt-4 bg-dashed border-2 border-yellow-300 text-yellow-600 hover:bg-yellow-50 hover:border-yellow-400 font-semibold py-2 rounded-lg transition-all flex items-center justify-center gap-2 text-sm">
+                            <i class="fas fa-plus-circle"></i> 新增銷售記錄
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 右側：結果展示 -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            <i class="fas fa-chart-pie text-green-500"></i> 分配結果
+                        </h2>
+
+                        <div id="resultContainer" class="space-y-3 max-h-[500px] overflow-y-auto custom-scrollbar">
+                            <!-- 動態生成結果 -->
+                        </div>
+
+                        <!-- 統計摘要 -->
+                        <div class="bg-gray-50 rounded-lg p-4 mt-6 border border-gray-200">
+                            <h3 class="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wider">統計摘要</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between border-b border-gray-200 pb-2">
+                                    <span class="text-gray-600">總人數</span>
+                                    <span class="font-semibold" id="totalMembers">0</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-200 pb-2">
+                                    <span class="text-gray-600">預留營運金</span>
+                                    <span class="font-semibold text-gray-600" id="summaryReserve">NT$ 0</span>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-200 pb-2">
+                                    <span class="text-gray-600">治療券總收入</span>
+                                    <span class="font-semibold text-green-600" id="summaryVoucherRevenue">NT$ 0</span>
+                                </div>
+                                <div class="flex justify-between items-end pt-1">
+                                    <span class="text-gray-800 font-bold">分配總額</span>
+                                    <span class="font-bold text-xl text-green-600" id="totalDistributed">NT$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 圖表 -->
+                        <div class="mt-6 h-64">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+
+                        <!-- 導出功能 -->
+                        <div class="mt-6 grid grid-cols-2 gap-3 no-print">
+                            <button onclick="exportAsCSV()"
+                                class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <i class="fas fa-file-csv"></i> 匯出 CSV
+                            </button>
+                            <button onclick="printPage()"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm">
+                                <i class="fas fa-print"></i> 列印報表
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 默認成員數據
+        const defaultMembers = [
+            { id: 1, name: '老闆', role: '老闆', percentage: 30 },
+            { id: 2, name: '醫生A', role: '醫生', percentage: 35 },
+            { id: 3, name: '護士B', role: '護士', percentage: 15 },
+            { id: 4, name: '業務C', role: '業務', percentage: 15 },
+            { id: 5, name: '行政D', role: '行政', percentage: 5 }
+        ];
+
+        // 默認治療券類型
+        const defaultVoucherTypes = [
+            { id: 1, name: '雷射療程券', price: 5000, bonusRate: 10 },
+            { id: 2, name: '微整形券', price: 8000, bonusRate: 12 },
+            { id: 3, name: '護膚療程券', price: 3000, bonusRate: 8 }
+        ];
+
+        // 默認銷售記錄
+        const defaultSalesRecords = [
+            { id: 1, memberId: 4, voucherId: 1, quantity: 5, date: '2023-10-15' },
+            { id: 2, memberId: 2, voucherId: 2, quantity: 3, date: '2023-10-18' },
+            { id: 3, memberId: 3, voucherId: 3, quantity: 8, date: '2023-10-20' }
+        ];
+
+        // 狀態變量
+        let members = [];
+        let voucherTypes = [];
+        let salesRecords = [];
+        let nextMemberId = 6;
+        let nextVoucherId = 4;
+        let nextSalesId = 4;
+        let chart = null;
+
+        const roleColors = {
+            '老闆': '#3b82f6',
+            '醫生': '#ef4444',
+            '護士': '#f59e0b',
+            '業務': '#10b981',
+            '行政': '#8b5cf6'
+        };
+
+        const roleEmojis = {
+            '老闆': '👔',
+            '醫生': '👨‍⚕️',
+            '護士': '👩‍⚕️',
+            '業務': '💼',
+            '行政': '📋'
+        };
+
+        // 格式化貨幣
+        function formatCurrency(num) {
+            return 'NT$ ' + Math.round(num).toLocaleString();
+        }
+
+        // 初始化
+        function init() {
+            loadData();
+
+            // 設置日期
+            const today = new Date();
+            document.getElementById('printDate').textContent = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+
+            renderMembers();
+            renderVoucherTypes();
+            renderSalesRecords();
+            calculate();
+        }
+
+        // 加載數據
+        function loadData() {
+            const savedData = localStorage.getItem('clinicBonusData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                members = data.members || JSON.parse(JSON.stringify(defaultMembers));
+                voucherTypes = data.voucherTypes || JSON.parse(JSON.stringify(defaultVoucherTypes));
+                salesRecords = data.salesRecords || JSON.parse(JSON.stringify(defaultSalesRecords));
+                nextMemberId = data.nextMemberId || 6;
+                nextVoucherId = data.nextVoucherId || 4;
+                nextSalesId = data.nextSalesId || 4;
+
+                document.getElementById('totalProfit').value = data.totalProfit || 500000;
+                document.getElementById('operatingReserve').value = data.operatingReserve || 10;
+                document.getElementById('voucherBonusPercentage').value = data.voucherBonusPercentage || 15;
+                document.getElementById('voucherTotalRevenue').value = data.voucherTotalRevenue || 200000;
+            } else {
+                members = JSON.parse(JSON.stringify(defaultMembers));
+                voucherTypes = JSON.parse(JSON.stringify(defaultVoucherTypes));
+                salesRecords = JSON.parse(JSON.stringify(defaultSalesRecords));
+            }
+        }
+
+        // 保存數據
+        function saveData() {
+            const data = {
+                members: members,
+                voucherTypes: voucherTypes,
+                salesRecords: salesRecords,
+                nextMemberId: nextMemberId,
+                nextVoucherId: nextVoucherId,
+                nextSalesId: nextSalesId,
+                totalProfit: document.getElementById('totalProfit').value,
+                operatingReserve: document.getElementById('operatingReserve').value,
+                voucherBonusPercentage: document.getElementById('voucherBonusPercentage').value,
+                voucherTotalRevenue: document.getElementById('voucherTotalRevenue').value
+            };
+            localStorage.setItem('clinicBonusData', JSON.stringify(data));
+        }
+
+        // 重置數據
+        function resetData() {
+            if (confirm('確定要重置所有數據嗎？這將恢復到默認設置。')) {
+                localStorage.removeItem('clinicBonusData');
+                location.reload();
+            }
+        }
+
+        // 渲染成員列表
+        function renderMembers() {
+            const container = document.getElementById('memberContainer');
+            document.getElementById('memberCountBadge').textContent = `${members.length} 人`;
+
+            container.innerHTML = members.map(member => `
+                <div class="bg-gray-50 p-4 rounded-lg border-l-4 shadow-sm hover:shadow-md transition-shadow mb-3" style="border-color: ${roleColors[member.role]}">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">${roleEmojis[member.role]}</span>
+                            <input type="text" value="${member.name}" 
+                                onchange="updateMember(${member.id}, 'name', this.value)"
+                                class="w-32 px-2 py-1 border-b-2 border-transparent hover:border-gray-300 focus:border-blue-500 bg-transparent font-semibold text-gray-900 focus:outline-none transition-colors"
+                                placeholder="姓名">
+                        </div>
+                        <button onclick="removeMember(${member.id})" class="text-gray-400 hover:text-red-500 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-2">
+                        <div>
+                            <label class="text-xs text-gray-500 block mb-1">職位</label>
+                            <select onchange="updateMember(${member.id}, 'role', this.value)"
+                                class="w-full px-2 py-1 border rounded text-sm bg-white focus:outline-none focus:border-blue-500">
+                                ${Object.keys(roleEmojis).map(role =>
+                `<option value="${role}" ${member.role === role ? 'selected' : ''}>${role}</option>`
+            ).join('')}
+                            </select>
+                        </div>
+                        <div>
+                             <label class="text-xs text-gray-500 block mb-1">利潤分潤比例 (%)</label>
+                             <input type="number" value="${member.percentage}" 
+                                onchange="updateMember(${member.id}, 'percentage', this.value)"
+                                class="w-full px-2 py-1 border rounded text-sm font-semibold text-center focus:outline-none focus:border-blue-500"
+                                min="0" max="100">
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="range" min="0" max="100" value="${member.percentage}"
+                            onchange="updateMember(${member.id}, 'percentage', this.value)"
+                            class="w-full h-1.5 bg-gray-300 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染治療券類型
+        function renderVoucherTypes() {
+            const container = document.getElementById('voucherContainer');
+
+            document.getElementById('voucherBonusPercentageDisplay').textContent =
+                document.getElementById('voucherBonusPercentage').value + '%';
+
+            if (voucherTypes.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg">
+                        <p class="text-gray-400 text-sm mb-2">尚未設置治療券類型</p>
+                        <p class="text-xs text-gray-400">請點擊上方"新增券種"按鈕</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = voucherTypes.map(voucher => `
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">${voucher.name}</h3>
+                                <p class="text-xs text-gray-500 mt-1">單價: ${formatCurrency(voucher.price)}</p>
+                            </div>
+                            <button onclick="removeVoucherType(${voucher.id})" class="text-gray-400 hover:text-red-500">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">獎金比例 (%)</label>
+                                <input type="number" value="${voucher.bonusRate}" 
+                                    onchange="updateVoucherType(${voucher.id}, 'bonusRate', this.value)"
+                                    class="w-full px-2 py-1 border rounded text-sm font-semibold text-center focus:outline-none focus:border-green-500"
+                                    min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500 block mb-1">單價</label>
+                                <div class="relative">
+                                    <span class="absolute left-2 top-1.5 text-xs text-gray-500">NT$</span>
+                                    <input type="number" value="${voucher.price}" 
+                                        onchange="updateVoucherType(${voucher.id}, 'price', this.value)"
+                                        class="w-full pl-10 pr-2 py-1 border rounded text-sm focus:outline-none focus:border-green-500"
+                                        min="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="text-xs text-gray-500 block mb-1">獎金比例調整</label>
+                            <input type="range" min="0" max="30" value="${voucher.bonusRate}"
+                                onchange="updateVoucherType(${voucher.id}, 'bonusRate', this.value)"
+                                class="w-full h-1.5 bg-green-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 渲染銷售記錄
+        function renderSalesRecords() {
+            const container = document.getElementById('salesContainer');
+
+            if (salesRecords.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg">
+                        <p class="text-gray-400 text-sm mb-2">尚未記錄治療券銷售</p>
+                        <p class="text-xs text-gray-400">請點擊下方"新增銷售記錄"按鈕</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = salesRecords.map(record => {
+                    const member = members.find(m => m.id === record.memberId);
+                    const voucher = voucherTypes.find(v => v.id === record.voucherId);
+                    return `
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <span class="font-semibold text-gray-900 text-sm">${member ? member.name : '未知成員'}</span>
+                                    <span class="text-xs text-gray-500 ml-2">${record.date}</span>
+                                </div>
+                                <button onclick="removeSalesRecord(${record.id})" class="text-gray-400 hover:text-red-500 text-sm">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-2 text-sm">
+                                <div>
+                                    <span class="text-xs text-gray-500 block">券種</span>
+                                    <select onchange="updateSalesRecord(${record.id}, 'voucherId', this.value)"
+                                        class="w-full px-2 py-1 border rounded text-xs bg-white focus:outline-none focus:border-yellow-500">
+                                        ${voucherTypes.map(v => `
+                                            <option value="${v.id}" ${record.voucherId === v.id ? 'selected' : ''}>
+                                                ${v.name}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500 block">數量</span>
+                                    <input type="number" value="${record.quantity}" 
+                                        onchange="updateSalesRecord(${record.id}, 'quantity', this.value)"
+                                        class="w-full px-2 py-1 border rounded text-xs text-center focus:outline-none focus:border-yellow-500"
+                                        min="1">
+                                </div>
+                                <div>
+                                    <span class="text-xs text-gray-500 block">銷售人</span>
+                                    <select onchange="updateSalesRecord(${record.id}, 'memberId', this.value)"
+                                        class="w-full px-2 py-1 border rounded text-xs bg-white focus:outline-none focus:border-yellow-500">
+                                        ${members.map(m => `
+                                            <option value="${m.id}" ${record.memberId === m.id ? 'selected' : ''}>
+                                                ${m.name}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2 text-xs">
+                                <span class="text-gray-500">總額: </span>
+                                <span class="font-semibold text-green-600">
+                                    ${voucher ? formatCurrency(voucher.price * record.quantity) : 'NT$ 0'}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // 更新成員
+        function updateMember(id, field, value) {
+            const member = members.find(m => m.id === id);
+            if (member) {
+                if (field === 'percentage') {
+                    member[field] = Math.max(0, Math.min(100, parseFloat(value) || 0));
+                } else {
+                    member[field] = value;
+                }
+                saveData();
+                renderMembers();
+                renderSalesRecords(); // 更新銷售記錄中的成員選擇
+                calculate();
+            }
+        }
+
+        // 新增成員
+        function addMember() {
+            members.push({
+                id: nextMemberId++,
+                name: `新成員${nextMemberId - 6}`,
+                role: '行政',
+                percentage: 0
+            });
+            saveData();
+            renderMembers();
+            renderSalesRecords();
+            calculate();
+        }
+
+        // 刪除成員
+        function removeMember(id) {
+            if (members.length === 1) {
+                alert('至少需要保留一個成員');
+                return;
+            }
+
+            // 檢查是否有銷售記錄
+            const hasSales = salesRecords.some(record => record.memberId === id);
+            if (hasSales) {
+                if (!confirm('該成員有銷售記錄，刪除後記錄將無法顯示成員名稱。確定要刪除嗎？')) {
+                    return;
+                }
+            }
+
+            members = members.filter(m => m.id !== id);
+            saveData();
+            renderMembers();
+            renderSalesRecords();
+            calculate();
+        }
+
+        // 更新治療券類型
+        function updateVoucherType(id, field, value) {
+            const voucher = voucherTypes.find(v => v.id === id);
+            if (voucher) {
+                if (field === 'bonusRate') {
+                    voucher[field] = Math.max(0, Math.min(100, parseFloat(value) || 0));
+                } else if (field === 'price') {
+                    voucher[field] = Math.max(0, parseFloat(value) || 0);
+                } else {
+                    voucher[field] = value;
+                }
+                saveData();
+                renderVoucherTypes();
+                renderSalesRecords();
+                calculate();
+            }
+        }
+
+        // 新增治療券類型
+        function addVoucherType() {
+            voucherTypes.push({
+                id: nextVoucherId++,
+                name: `新療程券${nextVoucherId - 4}`,
+                price: 5000,
+                bonusRate: 10
+            });
+            saveData();
+            renderVoucherTypes();
+            renderSalesRecords();
+            calculate();
+        }
+
+        // 刪除治療券類型
+        function removeVoucherType(id) {
+            // 檢查是否有銷售記錄
+            const hasSales = salesRecords.some(record => record.voucherId === id);
+            if (hasSales) {
+                alert('此券種已有銷售記錄，無法刪除。請先刪除相關銷售記錄。');
+                return;
+            }
+
+            voucherTypes = voucherTypes.filter(v => v.id !== id);
+            saveData();
+            renderVoucherTypes();
+            calculate();
+        }
+
+        // 更新銷售記錄
+        function updateSalesRecord(id, field, value) {
+            const record = salesRecords.find(r => r.id === id);
+            if (record) {
+                if (field === 'quantity') {
+                    record[field] = Math.max(1, parseInt(value) || 1);
+                } else if (field === 'date') {
+                    record[field] = value;
+                } else {
+                    record[field] = parseInt(value) || 1;
+                }
+                saveData();
+                renderSalesRecords();
+                calculate();
+            }
+        }
+
+        // 新增銷售記錄
+        function addSalesRecord() {
+            if (members.length === 0) {
+                alert('請先添加成員');
+                return;
+            }
+            if (voucherTypes.length === 0) {
+                alert('請先添加治療券類型');
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            salesRecords.push({
+                id: nextSalesId++,
+                memberId: members[0].id,
+                voucherId: voucherTypes[0].id,
+                quantity: 1,
+                date: today
+            });
+            saveData();
+            renderSalesRecords();
+            calculate();
+        }
+
+        // 刪除銷售記錄
+        function removeSalesRecord(id) {
+            salesRecords = salesRecords.filter(r => r.id !== id);
+            saveData();
+            renderSalesRecords();
+            calculate();
+        }
+
+        // 計算及更新
+        function calculate() {
+            const totalProfit = parseFloat(document.getElementById('totalProfit').value) || 0;
+            const operatingReserve = parseFloat(document.getElementById('operatingReserve').value) || 0;
+            const voucherBonusPercentage = parseFloat(document.getElementById('voucherBonusPercentage').value) || 0;
+            const voucherTotalRevenue = parseFloat(document.getElementById('voucherTotalRevenue').value) || 0;
+
+            saveData();
+
+            // 計算可分配金額
+            const reserveAmount = totalProfit * (operatingReserve / 100);
+            const availableAmount = totalProfit - reserveAmount;
+            const voucherBonusPool = voucherTotalRevenue * (voucherBonusPercentage / 100);
+
+            // 更新UI
+            document.getElementById('reserveAmount').textContent = formatCurrency(reserveAmount);
+            document.getElementById('availableAmount').textContent = formatCurrency(availableAmount);
+            document.getElementById('voucherBonusPool').textContent = formatCurrency(voucherBonusPool);
+            document.getElementById('operatingReserveDisplay').textContent = operatingReserve + '%';
+            document.getElementById('voucherBonusPercentageDisplay').textContent = voucherBonusPercentage + '%';
+            document.getElementById('summaryVoucherRevenue').textContent = formatCurrency(voucherTotalRevenue);
+
+            // 計算利潤分潤
+            const totalPercentage = members.reduce((sum, m) => sum + m.percentage, 0);
+            document.getElementById('totalPercentage').textContent = `${totalPercentage}%`;
+
+            // 進度條
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = Math.min(100, totalPercentage) + '%';
+
+            // 分潤合計顏色提示
+            const totalPercentageBox = document.getElementById('totalPercentageBox');
+            if (totalPercentage === 100) {
+                totalPercentageBox.className = 'mt-6 p-4 rounded-lg bg-green-50 border border-green-200';
+                progressBar.className = 'bg-green-500 h-2.5 rounded-full transition-all duration-500';
+            } else if (totalPercentage > 100) {
+                totalPercentageBox.className = 'mt-6 p-4 rounded-lg bg-red-50 border border-red-200';
+                progressBar.className = 'bg-red-500 h-2.5 rounded-full transition-all duration-500';
+            } else {
+                totalPercentageBox.className = 'mt-6 p-4 rounded-lg bg-amber-50 border border-amber-200';
+                progressBar.className = 'bg-amber-500 h-2.5 rounded-full transition-all duration-500';
+            }
+
+            // 計算治療券銷售獎金
+            const salesByMember = {};
+            let totalVoucherSales = 0;
+
+            salesRecords.forEach(record => {
+                const voucher = voucherTypes.find(v => v.id === record.voucherId);
+                if (voucher) {
+                    const salesAmount = voucher.price * record.quantity;
+                    const bonusAmount = salesAmount * (voucher.bonusRate / 100);
+
+                    if (!salesByMember[record.memberId]) {
+                        salesByMember[record.memberId] = {
+                            totalSales: 0,
+                            totalBonus: 0,
+                            details: []
+                        };
+                    }
+
+                    salesByMember[record.memberId].totalSales += salesAmount;
+                    salesByMember[record.memberId].totalBonus += bonusAmount;
+                    salesByMember[record.memberId].details.push({
+                        voucherName: voucher.name,
+                        quantity: record.quantity,
+                        price: voucher.price,
+                        salesAmount: salesAmount,
+                        bonusRate: voucher.bonusRate,
+                        bonusAmount: bonusAmount
+                    });
+
+                    totalVoucherSales += salesAmount;
+                }
+            });
+
+            // 計算按比例分配的治療券獎金
+            const proportionalBonusPool = voucherBonusPool;
+            let totalWeightedBonus = 0;
+            const weightedBonuses = {};
+
+            // 先計算總加權獎金
+            Object.keys(salesByMember).forEach(memberId => {
+                const salesData = salesByMember[memberId];
+                weightedBonuses[memberId] = salesData.totalBonus;
+                totalWeightedBonus += salesData.totalBonus;
+            });
+
+            // 計算結果
+            const results = members.map(member => {
+                // 利潤分潤部分
+                const profitShare = (availableAmount * member.percentage / 100) || 0;
+
+                // 治療券銷售獎金部分
+                let voucherBonus = 0;
+                let voucherDetails = [];
+
+                if (salesByMember[member.id]) {
+                    if (totalWeightedBonus > 0) {
+                        // 按加權比例分配
+                        voucherBonus = (proportionalBonusPool * weightedBonuses[member.id] / totalWeightedBonus) || 0;
+                    }
+                    voucherDetails = salesByMember[member.id].details;
+                }
+
+                const total = profitShare + voucherBonus;
+
+                return {
+                    id: member.id,
+                    name: member.name,
+                    role: member.role,
+                    percentage: member.percentage,
+                    profitShare,
+                    voucherBonus,
+                    voucherDetails,
+                    total
+                };
+            });
+
+            // 渲染結果
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = results.map(result => {
+                const voucherDetailsHTML = result.voucherDetails.length > 0 ? `
+                    <div class="mt-2 pt-2 border-t border-gray-100">
+                        <p class="text-xs text-gray-500 mb-1 font-medium">治療券銷售明細:</p>
+                        ${result.voucherDetails.map(detail => `
+                            <div class="text-xs grid grid-cols-2 gap-1 mb-1">
+                                <span class="text-gray-500">${detail.voucherName} ×${detail.quantity}</span>
+                                <span class="text-right">
+                                    ${formatCurrency(detail.salesAmount)} (${detail.bonusRate}%)
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="bg-white p-4 rounded-lg border-l-4 shadow-sm hover:bg-gray-50 transition-colors" style="border-color: ${roleColors[result.role]}">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">${roleEmojis[result.role]}</span>
+                                <span class="font-semibold text-gray-900">${result.name}</span>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">${result.role}</span>
+                        </div>
+                        
+                        <div class="space-y-1 text-sm mt-3">
+                            ${result.percentage > 0 ? `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500 flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div>利潤分潤 (${result.percentage}%)</span>
+                                    <span class="font-medium text-gray-700">${formatCurrency(result.profitShare)}</span>
+                                </div>
+                            ` : ''}
+                            ${result.voucherBonus > 0 ? `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500 flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>治療券獎金</span>
+                                    <span class="font-medium text-green-600">+ ${formatCurrency(result.voucherBonus)}</span>
+                                </div>
+                            ` : ''}
+                            ${voucherDetailsHTML}
+                            <div class="flex justify-between pt-2 border-t border-gray-100 mt-2">
+                                <span class="font-bold text-gray-900">合計</span>
+                                <span class="font-bold text-lg text-green-600">${formatCurrency(result.total)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 統計摘要
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('totalDistributed').textContent = formatCurrency(
+                results.reduce((sum, r) => sum + r.total, 0)
+            );
+            document.getElementById('summaryReserve').textContent = formatCurrency(reserveAmount);
+
+            // 更新圖表
+            updateChart(results);
+        }
+
+        // 更新圖表
+        function updateChart(results) {
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            // 只顯示金額大於0的成員
+            const activeResults = results.filter(r => r.total > 0);
+
+            if (activeResults.length === 0) {
+                // 如果沒有數據，顯示空狀態
+                document.getElementById('distributionChart').innerHTML = `
+                    <div class="flex items-center justify-center h-full text-gray-400">
+                        <div class="text-center">
+                            <i class="fas fa-chart-pie text-3xl mb-2"></i>
+                            <p class="text-sm">無分配數據</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: activeResults.map(r => r.name),
+                    datasets: [{
+                        data: activeResults.map(r => r.total),
+                        backgroundColor: activeResults.map(r => roleColors[r.role]),
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: 10
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: { size: 11 },
+                                boxWidth: 12,
+                                padding: 10,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1f2937',
+                            bodyColor: '#4b5563',
+                            borderColor: '#e5e7eb',
+                            borderWidth: 1,
+                            padding: 10,
+                            callbacks: {
+                                label: function (context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return ` NT$ ${Math.round(value).toLocaleString()} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 匯出CSV
+        function exportAsCSV() {
+            const totalProfit = parseFloat(document.getElementById('totalProfit').value);
+            const operatingReserve = parseFloat(document.getElementById('operatingReserve').value);
+            const voucherBonusPercentage = parseFloat(document.getElementById('voucherBonusPercentage').value);
+            const voucherTotalRevenue = parseFloat(document.getElementById('voucherTotalRevenue').value);
+
+            const reserveAmount = totalProfit * (operatingReserve / 100);
+            const availableAmount = totalProfit - reserveAmount;
+            const voucherBonusPool = voucherTotalRevenue * (voucherBonusPercentage / 100);
+
+            // 計算治療券銷售獎金
+            const salesByMember = {};
+            let totalWeightedBonus = 0;
+            const weightedBonuses = {};
+
+            salesRecords.forEach(record => {
+                const voucher = voucherTypes.find(v => v.id === record.voucherId);
+                if (voucher) {
+                    const salesAmount = voucher.price * record.quantity;
+                    const bonusAmount = salesAmount * (voucher.bonusRate / 100);
+
+                    if (!salesByMember[record.memberId]) {
+                        salesByMember[record.memberId] = {
+                            totalBonus: 0,
+                            totalSales: 0
+                        };
+                    }
+
+                    salesByMember[record.memberId].totalBonus += bonusAmount;
+                    salesByMember[record.memberId].totalSales += salesAmount;
+                }
+            });
+
+            // 計算總加權獎金
+            Object.keys(salesByMember).forEach(memberId => {
+                weightedBonuses[memberId] = salesByMember[memberId].totalBonus;
+                totalWeightedBonus += salesByMember[memberId].totalBonus;
+            });
+
+            // 計算結果
+            const results = members.map(member => {
+                const profitShare = (availableAmount * member.percentage / 100) || 0;
+
+                let voucherBonus = 0;
+                if (salesByMember[member.id] && totalWeightedBonus > 0) {
+                    voucherBonus = (voucherBonusPool * weightedBonuses[member.id] / totalWeightedBonus) || 0;
+                }
+
+                const total = profitShare + voucherBonus;
+
+                return [
+                    member.name,
+                    member.role,
+                    member.percentage,
+                    Math.round(profitShare),
+                    salesByMember[member.id] ? Math.round(salesByMember[member.id].totalSales) : 0,
+                    Math.round(voucherBonus),
+                    Math.round(total)
+                ];
+            });
+
+            // 銷售記錄明細
+            const salesDetails = salesRecords.map(record => {
+                const member = members.find(m => m.id === record.memberId);
+                const voucher = voucherTypes.find(v => v.id === record.voucherId);
+                const salesAmount = voucher ? voucher.price * record.quantity : 0;
+                const bonusAmount = voucher ? salesAmount * (voucher.bonusRate / 100) : 0;
+
+                return [
+                    record.date,
+                    member ? member.name : '未知',
+                    voucher ? voucher.name : '未知',
+                    record.quantity,
+                    Math.round(voucher ? voucher.price : 0),
+                    Math.round(salesAmount),
+                    voucher ? voucher.bonusRate : 0,
+                    Math.round(bonusAmount)
+                ];
+            });
+
+            const headers = ['姓名', '職位', '利潤分潤比例(%)', '利潤分潤金額', '治療券銷售額', '治療券獎金', '合計'];
+            const salesHeaders = ['日期', '銷售人', '券種', '數量', '單價', '銷售額', '獎金比例%', '獎金金額'];
+
+            const csv = [
+                ['醫美診所分潤計算報表'],
+                [`日期,${new Date().toLocaleDateString()}`],
+                [`月度總獲利,NT$ ${totalProfit.toLocaleString()}`],
+                [`預留營運金,NT$ ${reserveAmount.toLocaleString()} (${operatingReserve}%)`],
+                [`可分配金額,NT$ ${availableAmount.toLocaleString()}`],
+                [`治療券總收入,NT$ ${voucherTotalRevenue.toLocaleString()}`],
+                [`治療券獎金池,NT$ ${voucherBonusPool.toLocaleString()} (${voucherBonusPercentage}%)`],
+                [],
+                ['=== 成員分配結果 ==='],
+                headers,
+                ...results,
+                [],
+                ['=== 治療券銷售明細 ==='],
+                salesHeaders,
+                ...salesDetails
+            ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `醫美診所分潤計算_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // 列印
+        function printPage() {
+            window.print();
+        }
+
+        // 監聽輸入變化
+        document.getElementById('totalProfit').addEventListener('input', calculate);
+        document.getElementById('operatingReserve').addEventListener('input', calculate);
+        document.getElementById('voucherBonusPercentage').addEventListener('input', calculate);
+        document.getElementById('voucherTotalRevenue').addEventListener('input', calculate);
+
+        // 初始化
+        init();
+    </script>
+
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .shadow-lg {
+                box-shadow: none;
+                border: 1px solid #eee;
+            }
+
+            /* 確保打印時圖表顯示 */
+            canvas {
+                max-height: 300px;
+            }
+        }
+
+        /* 自定義滾動條 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #3b82f6;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 針對 Firefox 的樣式 */
+        input[type="range"]::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #3b82f6;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+
+        /* 針對不同滑塊的顏色 */
+        #operatingReserve::-webkit-slider-thumb {
+            border-color: #3b82f6;
+        }
+
+        #voucherBonusPercentage::-webkit-slider-thumb {
+            border-color: #10b981;
+        }
+
+        /* 動畫效果 */
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+    </style>
+</body>
+
+</html>

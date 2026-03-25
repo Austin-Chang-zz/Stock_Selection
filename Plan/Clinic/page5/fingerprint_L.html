@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fingerprint Authentication</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .fingerprint {
+            width: 120px;
+            height: 120px;
+            margin: 1.5rem auto;
+            border: 4px solid #0066ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .fingerprint::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 3px solid #0066ff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .fingerprint img {
+            width: 60px;
+            opacity: 0.9;
+        }
+
+        .status {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            min-height: 1.5em;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .failure {
+            color: #dc3545;
+        }
+
+        button {
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: #0066ff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #0052cc;
+        }
+
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>Authenticate</h2>
+        <p>Please place your finger on the sensor</p>
+
+        <div class="fingerprint" id="fingerprintArea">
+            <img src="https://img.icons8.com/ios-filled/100/0066ff/fingerprint.png" alt="fingerprint icon">
+        </div>
+
+        <div class="status" id="status">Waiting for fingerprint...</div>
+
+        <button id="startBtn">Start Authentication</button>
+        <button id="resetBtn" style="display:none; background:#6c757d;">Try Again</button>
+    </div>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const fingerprintArea = document.getElementById('fingerprintArea');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function setStatus(text, className = '') {
+            statusEl.textContent = text;
+            statusEl.className = 'status ' + className;
+        }
+
+        function simulateSuccess() {
+            fingerprintArea.style.borderColor = '#28a745';
+            setStatus('Authentication successful!', 'success');
+            startBtn.style.display = 'none';
+            resetBtn.style.display = 'inline-block';
+        }
+
+        function simulateFailure() {
+            fingerprintArea.style.borderColor = '#dc3545';
+            setStatus('Authentication failed. Try again.', 'failure');
+            startBtn.style.display = 'none';
+            resetBtn.style.display = 'inline-block';
+        }
+
+        function startAuth() {
+            setStatus('Scanning fingerprint...');
+            fingerprintArea.style.borderColor = '#0066ff';
+
+            // Simulate processing time (real WebAuthn would call navigator.credentials.get())
+            const delay = Math.random() * 1500 + 1000; // 1–2.5s
+
+            setTimeout(() => {
+                // 80% success rate for demo purposes
+                if (Math.random() < 0.8) {
+                    simulateSuccess();
+                } else {
+                    simulateFailure();
+                }
+            }, delay);
+        }
+
+        startBtn.addEventListener('click', startAuth);
+        resetBtn.addEventListener('click', () => {
+            resetBtn.style.display = 'none';
+            startBtn.style.display = 'inline-block';
+            setStatus('Waiting for fingerprint...');
+            fingerprintArea.style.borderColor = '#0066ff';
+        });
+    </script>
+</body>
+
+</html>

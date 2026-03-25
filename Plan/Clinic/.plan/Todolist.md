@@ -222,4 +222,84 @@ the path is plan/Clinic/page4/public4_replit/pages
 ## todo
 - think over how to cowork replit with trae.
 - 
-- 
+# 2026/1/11
+## prompt for bonus
+- The profit-sharing arrangement at the aesthetic medical clinic includes:
+
+  - Performance-based bonuses calculated based on the types, quantities, and total revenue of treatment vouchers sold; and
+  - A share of the clinic’s overall monthly net profit.
+- please upgrade attached bonus.html according to the new features listed above. and new version of bonus.html can be previewed.
+
+# 2026/1/26
+## prompt for customer page
+- on /pages/sales/customers the requirement list as follows:
+  - can't add new customer on top right "+" icon.
+  - The sorting buttons "全部", "VIP 客戶", "新客戶", "待回診" are not working, please use mock data to test these sorting buttons.
+
+## prompt for next step
+- Build in this order for each feature:
+  - Database → API → Backend logic → Frontend integration → Testing
+- here are the next steps in logical order:
+
+1. Backend Development
+Set up API endpoints that match frontend needs
+
+Connect to database using ORM (Prisma, Sequelize, TypeORM) or raw queries
+
+Implement business logic and validation
+
+Set up authentication/authorization (JWT, OAuth, sessions)
+
+2. Frontend Implementation
+Convert UI designs into actual components (React/Vue/Angular/etc.)
+
+Implement state management (Redux, Context, Vuex, etc.)
+
+Add routing and navigation
+
+Integrate with backend APIs
+
+3. API Integration
+Connect frontend to backend endpoints
+
+Handle loading states and error handling
+
+Implement data fetching/caching strategies
+
+4. Testing
+Unit tests: Individual functions/components
+
+Integration tests: API endpoints + database
+
+E2E tests: User workflows (Cypress, Playwright)
+
+Test critical user journeys
+
+# 2026/1/27
+
+https://43498c39-5143-4377-a249-545b1dde189f-00-2gs7idfl8obxp.pike.replit.dev/
+
+測試帳號
+角色	帳號	密碼
+患者	patient1	123456
+員工	nurse1	staff123
+員工	doctor1	doctor123
+管理員	admin	admin123
+
+宮格測試圖形密碼
+角色	帳號	圖形密碼	圖形說明
+病人	patient1	1-2-3-6	橫L型 (往右再往下)
+員工	nurse1/doctor1	1-4-7-8-9	L型 (往下再往右)
+管理員	admin	1-5-9-6-3	Z字型 (對角線往右)
+九宮格對照表
+┌───┬───┬───┐
+│ 1 │ 2 │ 3 │
+├───┼───┼───┤
+│ 4 │ 5 │ 6 │
+├───┼───┼───┤
+│ 7 │ 8 │ 9 │
+└───┴───┴───┘
+
+# 2026/1/30
+## prompt for data entry
+- please create all the data entry pages in suitable place according to database schema.
